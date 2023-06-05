@@ -1,17 +1,34 @@
-import { loginFailed, loginStart, setUser } from "../../../redux/features/auth";
+import { convertPhoneNumberTo84 } from "../../../helper/convertPhonenumber";
+import {
+  loginFailed,
+  loginStart,
+  logoutFailed,
+  logoutStart,
+  logoutSuccess,
+  setUser,
+} from "../../../redux/features/auth";
 import { instance as api } from "../../initial";
 
 export const loginUser = async (user: any, dispatch: any, navigation: any) => {
   dispatch(loginStart());
   try {
-    console.log(user);
-    const res = await api.post("/auth/login", user);
-    console.log(res.data.data);
-    dispatch(setUser(res.data.data));
-    navigation.navigate("Main", {
-      screen: "Home",
-      initial: false,
-    });
+    let { phoneNumber, password } = user;
+    phoneNumber = convertPhoneNumberTo84(phoneNumber);
+    console.log(phoneNumber);
+    const res = await api.post("/auth/login", { phoneNumber, password });
+    console.log(res.data);
+    if (res.status === 200) {
+      dispatch(setUser(res.data.data));
+      res.data.data?.role === "distributor"
+        ? navigation.navigate("MainDistributor", {
+            screen: "Home",
+            initial: false,
+          })
+        : navigation.navigate("MainRetailer", {
+            screen: "Home",
+            initial: false,
+          });
+    }
   } catch (error: any) {
     if (error.response) {
       // Xử lý lỗi từ phản hồi từ server
@@ -23,5 +40,14 @@ export const loginUser = async (user: any, dispatch: any, navigation: any) => {
       // Xử lý các lỗi khác
       console.log("Error:", error.message);
     }
+  }
+};
+export const logoutUser = async (dispatch: any, navigation: any) => {
+  dispatch(logoutStart());
+  try {
+    dispatch(logoutSuccess());
+    navigation.navigate("Login");
+  } catch (error) {
+    dispatch(logoutFailed());
   }
 };

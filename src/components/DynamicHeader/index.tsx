@@ -1,6 +1,6 @@
 // Expo SDK41
 // expo-blur: ~9.0.3
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Animated,
   ImageBackground,
@@ -23,10 +23,9 @@ import { BlurView } from "@react-native-community/blur";
 import { Avatar } from "react-native-paper";
 import ItemOrderView from "../ItemOrderView";
 import { color } from "../../utils";
+import { titleCase } from "../../helper/titleCase";
 // import SearchBar from "../Search/SearchBar";
 
-const HEADER_HEIGHT_EXPANDED = 30;
-const HEADER_HEIGHT_NARROWED = 132;
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -39,45 +38,57 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 export default function DynamicHeader({
   children,
   username,
+  selectList,
 }: //   refreshing,
 //   setRefreshing,
 {
   children: any;
   username: any;
+  selectList: number;
   //   refreshing: any;
   //   setRefreshing: any;
 }) {
   // Keeps notches away
   return (
-    <SafeAreaProvider>
-      <App
-        username={username}
-        // refreshing={refreshing}
-        // setRefreshing={setRefreshing}
-      >
-        {children}
-      </App>
-    </SafeAreaProvider>
+    <App
+      username={username}
+      selectList={selectList}
+      // refreshing={refreshing}
+      // setRefreshing={setRefreshing}
+    >
+      <StatusBar
+        animated={true}
+        backgroundColor={color.Primary}
+        barStyle={"light-content"}
+      />
+
+      {children}
+    </App>
   );
 }
 
 function App({
   children,
   username,
+  selectList,
 }: //   refreshing,
 //   setRefreshing,
 {
   children: any;
   username: any;
+  selectList: number;
   //   refreshing: any;
   //   setRefreshing: any;
 }) {
   const insets = useSafeAreaInsets();
   const scrollY = useRef(new Animated.Value(0)).current;
+  const HEADER_HEIGHT_EXPANDED = 20;
+  const HEADER_HEIGHT_NARROWED = Platform.OS === "ios" ? 132 : 80;
   //   const onRefresh = React.useCallback(() => {
   //     setRefreshing(true);
   //     wait(2000).then(() => setRefreshing(false));
   //   }, []);
+
   return (
     <View style={styles.container}>
       <Animated.View
@@ -106,44 +117,10 @@ function App({
         <Feather name="arrow-down" color="white" size={25} />
       </Animated.View>
 
-      {/* Name + tweets count */}
-      {/* <Animated.View
-        style={{
-          zIndex: 1,
-          position: "absolute",
-          top: insets.top + 6,
-          left: 0,
-          right: 0,
-          alignItems: "center",
-          opacity: scrollY.interpolate({
-            inputRange: [90, 110],
-            outputRange: [0, 1],
-          }),
-          transform: [
-            {
-              translateY: scrollY.interpolate({
-                inputRange: [90, 120],
-                outputRange: [30, 0],
-                extrapolate: "clamp",
-              }),
-            },
-          ],
-        }}
-      >
-        <View
-          style={{
-            paddingHorizontal: 24,
-            width: "100%",
-          }}
-        ></View>
-      </Animated.View> */}
-
       <AnimatedImageBackground
         style={{
-          position: "absolute",
           backgroundColor: color.Primary,
           zIndex: 3,
-
           left: 0,
           right: 0,
           height: HEADER_HEIGHT_EXPANDED + HEADER_HEIGHT_NARROWED,
@@ -162,33 +139,24 @@ function App({
         }}
         source={0}
       >
-        {/* <Animated.View
-          // tint="dark"
-          // intensity={96}
-          // blurType="light"
-          // blurAmount={10}
-          // reducedTransparencyFallbackColor="white"
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            zIndex: 2,
-            opacity: scrollY.interpolate({
-              inputRange: [-50, 0, 50, 100],
-              outputRange: [1, 0, 0, 1],
-            }),
-          }}
-        /> */}
         <Animated.View
           style={{
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-around",
-            marginTop: 72,
+            marginTop: Platform.OS === "ios" ? 72 : 20,
             // borderWidth: 1,
+            opacity: scrollY.interpolate({
+              inputRange: [-200, 0, 200],
+              outputRange: [0, 1, 0],
+              extrapolateLeft: "extend",
+              extrapolateRight: "clamp",
+            }),
           }}
         >
           <View style={styles.boxName}>
             <Text style={styles.helloText}>Hello,</Text>
-            <Text style={styles.nameText}>{username}</Text>
+            <Text style={styles.nameText}>{titleCase(username)}</Text>
           </View>
           <Avatar.Image
             size={60}
@@ -200,84 +168,70 @@ function App({
       </AnimatedImageBackground>
 
       <Animated.FlatList
-        // nestedScrollEnabled={false}
-        // showsVerticalScrollIndicator={false}
-        // onScroll={Animated.event(
-        //   [
-        //     {
-        //       nativeEvent: {
-        //         contentOffset: { y: scrollY },
-        //       },
-        //     },
-        //   ],
-        //   { useNativeDriver: true }
-        // )}
         data={DATA}
         style={{
-          zIndex: 0,
+          zIndex: 2,
           paddingHorizontal: 16,
-          marginTop: HEADER_HEIGHT_NARROWED,
-          paddingTop: HEADER_HEIGHT_EXPANDED,
-          paddingBottom: 120,
         }}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: { y: scrollY },
+              },
+            },
+          ],
+          { useNativeDriver: true }
+        )}
         // refreshControl={
         //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         // }
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <ItemOrderView isShowStatus={true} selectList={selectList} />
+        )}
       />
       {children}
-      {/* </Animated.FlatList> */}
     </View>
   );
 }
 const DATA: any[] = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
   },
   {
     id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
   },
   {
     id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
   },
   {
     id: "58694a0f-3da1-471f-bq96-145571e29d72",
-    title: "Third Item",
   },
   {
-    id: "58694a0f-3da1-471f-bqư96-145571e29d72",
-    title: "Third Item",
+    id: "58694a0f-3da1-471f-a96-145571e29d72",
   },
   {
     id: "58694a0f-3da1-471f-bdq6-145571e29d72",
-    title: "Third Item",
   },
   {
     id: "58694a0f-3da1-471f-bdg6-145571e29d72",
-    title: "Third Item",
   },
   {
     id: "58694a0f-3da1-471f-bda6-145571e29d72",
-    title: "Third Item",
   },
 ];
-const renderItem = ({ item }: { item: any }) => {
-  return <ItemOrderView />;
-};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingBottom: 100,
   },
   text: {
     color: "white",
   },
   username: {
     fontSize: 18,
-    // fontWeight: "bold",
     fontFamily: "RobotoSlab-Bold",
     marginBottom: -3,
   },

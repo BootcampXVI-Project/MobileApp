@@ -8,6 +8,8 @@ import RenderSlide from "./RenderSlide";
 import { windowWidth } from "../../utils";
 
 const Slide = ({ item }: { item: any }) => {
+  // console.log(item);
+
   const isCarousel = React.useRef(null);
   const [index, setIndex] = React.useState(0);
   if (item) {

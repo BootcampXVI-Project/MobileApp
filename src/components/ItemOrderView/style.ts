@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "row",
     marginHorizontal: 4,
-    marginVertical: 12,
+    marginVertical: 8,
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
 
-    elevation: 8,
+    elevation: 4,
   },
   price: {
     alignItems: "center",

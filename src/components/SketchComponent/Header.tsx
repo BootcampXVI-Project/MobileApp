@@ -1,10 +1,14 @@
-import React, { MutableRefObject } from "react";
+import React, { MutableRefObject, useState } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import type { SketchCanvasRef } from "rn-perfect-sketch-canvas";
 import { state } from "./store";
 import Util from "./utils";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { firebase } from "../../firebase/firebase";
+import { decodeBase64ToImage } from "../../helper/decodeBase64";
+// import storage from "@react-native-firebase/storage";
+import * as FileSystem from "expo-file-system";
 
 interface Props {
   canvasRef: MutableRefObject<SketchCanvasRef | null>;
@@ -16,6 +20,9 @@ const Header: React.FC<Props> = ({ canvasRef, setSignature }) => {
    * Reset the canvas & draw state
    */
   const navigation = useNavigation();
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const reset = () => {
     canvasRef.current?.reset();
@@ -23,10 +30,10 @@ const Header: React.FC<Props> = ({ canvasRef, setSignature }) => {
     state.strokeWidth = 8;
   };
 
-  const save = () => {
+  const save = async () => {
     const image = canvasRef.current?.toImage()?.encodeToBase64();
     if (image) {
-      setSignature(image);
+      await uploadImage(image);
       navigation.goBack();
     }
   };
@@ -35,6 +42,88 @@ const Header: React.FC<Props> = ({ canvasRef, setSignature }) => {
     canvasRef.current?.undo();
   };
 
+  //     setLoading(false);
+  //     return null;
+  //   }
+  //   const uploadUri = `data:image/png;base64,${image}`;
+  //   let filename = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
+  //   const extension = "png";
+  //   const name = filename.split(".").slice(0, -1).join(".");
+  //   filename = String(Date.now() + "." + extension);
+  //   setUploading(true);
+  //   setTransferred(0);
+  //   const storageRef = storage.ref().child(`signatureimg/${filename}`);
+  //   const task = storageRef.putString(uploadUri);
+
+  //   task.on("state_changed", (taskSnapshot: any) => {
+  //     console.log(
+  //       `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
+  //     );
+
+  //     setTransferred(
+  //       Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
+  //         100
+  //     );
+  //   });
+
+  //   try {
+  //     await task;
+
+  //     const url = await storageRef.getDownloadURL();
+
+  //     setUploading(false);
+  //     // setImage(null);
+  //     console.log(url);
+  //     return url;
+  //   } catch (e) {
+  //     console.log(e);
+  //     return null;
+  //   }
+  // };
+
+  const uploadImage = async (image: any) => {
+    // const uploadUri = `data:image/png;base64,${image}`;
+    const outputFilePath = FileSystem.documentDirectory + "image.png"; // Đường dẫn tệp hình ảnh đầu ra
+
+    const url = await decodeBase64ToImage(image, outputFilePath);
+    const blob: any = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", url, true);
+      xhr.send(null);
+    });
+    let filename = String(Date.now());
+    const ref = firebase.storage().ref().child(`signatureimg/${filename}`);
+    const snapshot = ref.put(blob);
+    snapshot.on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      () => {
+        setUploading(true);
+      },
+      (error) => {
+        setUploading(false);
+        console.log(error);
+        blob.close();
+        return;
+      },
+      () => {
+        snapshot.snapshot.ref.getDownloadURL().then((url) => {
+          setUploading(false);
+          // console.log("Download URL: ", url);
+          // setImage(url);
+          setSignature(url);
+          blob.close();
+          return url;
+        });
+      }
+    );
+  };
   return (
     <View
       style={{

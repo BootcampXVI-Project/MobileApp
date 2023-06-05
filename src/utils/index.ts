@@ -3,7 +3,7 @@ export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;
 
 export const GOOGLE_MAPS_APIKEY = "AIzaSyDnLqxxm-krLEHIedWbsM-6fKdHrs6j7C8";
-export const API_URL = "https://f365932b5348.ngrok.app";
+export const API_URL = "https://f20f59bc6393.ngrok.app";
 export const shadow = {
   shadowColor: "#000",
   shadowOffset: {
@@ -38,4 +38,6 @@ export const getDelta = (
 export const color = {
   Primary: "#379634",
   Secondary: "#fbab18",
+  Pending: "#F7CB73",
+  Shipping: "#294268",
 };

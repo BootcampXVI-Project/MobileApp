@@ -4,16 +4,6 @@ import Accordion from "react-native-collapsible/Accordion";
 import styles from "./style";
 import CardProduct from "../CardProduct";
 import Slide from "../SlideImage/Slide";
-const SECTIONS = [
-  {
-    title: "First",
-    content: "Lorem ipsum1111111111111111...",
-  },
-  {
-    title: "Second",
-    content: "Lorem ipsum.222222222222222222222222..",
-  },
-];
 const LIST = [
   {
     product: {

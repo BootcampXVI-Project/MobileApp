@@ -1,5 +1,6 @@
 import { configureStore, createStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./features/auth";
+import cartReducer from "./features/cart";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -11,16 +12,17 @@ import {
   PAUSE,
   PERSIST,
   PURGE,
-  REGISTER
+  REGISTER,
 } from "redux-persist";
 
 const persistConfig = {
   key: "root",
   version: 1,
-  storage: AsyncStorage
+  storage: AsyncStorage,
 };
 const rootReducer = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  cart: cartReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -30,9 +32,9 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
-    })
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export let persistor = persistStore(store);

@@ -9,19 +9,34 @@ import AwesomeButton from "react-native-really-awesome-button";
 import { color, windowHeight, windowWidth } from "../../utils";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../../api/controller/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { Platform } from "react-native";
 
 type Props = {};
 type FormValues = {
-  // Định nghĩa các trường của mẫu và kiểu dữ liệu tương ứng
-  // Ví dụ:
   username: string;
   password: string;
 };
-const PHONE_REGEX = /^\+[1-9]\d{1,14}$/;
+const PHONE_REGEX = /^(\+?\d{0,9}[-.\s]?)?\d{9,}$/;
 
 const Login = (props: Props) => {
+  const user = useSelector((state: any) => state?.auth?.user);
+  console.log(user);
+
+  useEffect(() => {
+    if (user) {
+      user?.role === "distributor"
+        ? navigation.navigate("MainDistributor", {
+            screen: "Home",
+            initial: false,
+          })
+        : navigation.navigate("MainRetailer", {
+            screen: "Home",
+            initial: false,
+          });
+    }
+  }, []);
   const navigation = useNavigation();
   const {
     control,
@@ -37,8 +52,20 @@ const Login = (props: Props) => {
   };
   return (
     <View
-      style={{ flex: 1, backgroundColor: "#fff", zIndex: 0, paddingTop: 60 }}
+      style={{
+        flex: 1,
+        backgroundColor: "#fff",
+        zIndex: 0,
+        paddingTop: Platform.OS === "ios" ? 60 : 0,
+      }}
     >
+      <StatusBar
+        animated={true}
+        backgroundColor={"#fff"}
+        hidden={false}
+        barStyle={"dark-content"}
+      />
+
       <ScrollView style={{ flex: 1, zIndex: 2 }}>
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           <Text style={styles.welcomeText}>Welcome to</Text>

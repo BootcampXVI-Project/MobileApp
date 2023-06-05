@@ -1,6 +1,9 @@
-import HomeScreen from "../../screen/HomeScreen";
-import SettingScreen from "../../screen/SettingScreen";
-import ScanScreen from "../../screen/ScanScreen";
+import DistributorHomeScreen from "../../screen/distributor/HomeScreen";
+import RetailerHomeScreen from "../../screen/retailer/HomeScreen";
+import DistributorSettingScreen from "../../screen/distributor/SettingScreen";
+import RetailerSettingScreen from "../../screen/distributor/SettingScreen";
+
+import ScanScreen from "../../screen/distributor/ScanScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import styles from "./style";
@@ -40,7 +43,7 @@ const CustomTabBarButton = ({
   </TouchableOpacity>
 );
 
-export function MyTabs() {
+export function TabsDistributor() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -60,7 +63,7 @@ export function MyTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={DistributorHomeScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -86,6 +89,7 @@ export function MyTabs() {
                 style={{
                   color: focused ? color.Secondary : "#000",
                   fontSize: 14,
+                  fontFamily: "RobotoSlab-VariableFont_wght",
                 }}
               >
                 Order
@@ -117,7 +121,7 @@ export function MyTabs() {
       />
       <Tab.Screen
         name="Setting"
-        component={SettingScreen}
+        component={DistributorSettingScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -144,9 +148,128 @@ export function MyTabs() {
                 style={{
                   color: focused ? color.Secondary : "#000",
                   fontSize: 14,
+                  fontFamily: "RobotoSlab-VariableFont_wght",
+                }}
+              >
+                Profile
+              </Text>
+            </View>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+export function TabsRetailer() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 20,
+          left: 20,
+          right: 20,
+          //   elevation: 0,
+          backgroundColor: "#fff",
+          borderRadius: 18,
+          height: 80,
+          ...styles.shadow,
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={RetailerHomeScreen}
+        options={{
+          // headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                // top: 10,
+                alignItems: "center",
+                justifyContent: "center",
+                bottom: Platform.OS === "ios" ? -14 : 0,
+              }}
+            >
+              <Image
+                source={{
+                  uri: "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fbox.png?alt=media&token=785470e8-299f-4cd1-9c0e-194b561f8650",
+                }}
+                resizeMode="contain"
+                style={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
+              <Text
+                style={{
+                  color: focused ? color.Secondary : "#000",
+                  fontSize: 14,
+                  fontFamily: "RobotoSlab-VariableFont_wght",
                 }}
               >
                 Order
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Scan"
+        component={ScanScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={{
+                uri: "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fqr-code%20(4).png?alt=media&token=7db912aa-b9d6-4c9f-96c6-80bcdcde67e7",
+              }}
+              resizeMode="contain"
+              style={{
+                width: 30,
+                height: 30,
+                // tintColor:
+              }}
+            />
+          ),
+          tabBarButton: (props: any) => <CustomTabBarButton {...props} />,
+        }}
+      />
+      <Tab.Screen
+        name="Setting"
+        component={RetailerSettingScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                // top: 10,
+                alignItems: "center",
+                justifyContent: "center",
+                bottom: Platform.OS === "ios" ? -14 : 0,
+              }}
+            >
+              <Image
+                source={{
+                  uri: "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fuser.png?alt=media&token=1de9f1ff-e346-48d7-83c4-adbd8c3f5273",
+                }}
+                resizeMode="contain"
+                style={{
+                  width: 24,
+                  height: 24,
+                  // tintColor:
+                }}
+              />
+              <Text
+                style={{
+                  color: focused ? color.Secondary : "#000",
+                  fontSize: 14,
+                  fontFamily: "RobotoSlab-VariableFont_wght",
+                }}
+              >
+                Profile
               </Text>
             </View>
           ),
