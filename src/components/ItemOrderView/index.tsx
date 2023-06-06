@@ -52,7 +52,7 @@ const ItemOrderView: React.FC<Props> = ({
               }
               color={selectList == 0 ? color.Primary : color.Secondary}
               fontSize={16}
-              text="Finish delivery"
+              text="Finish"
             />
           </View>
         ) : (

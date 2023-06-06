@@ -12,6 +12,7 @@ import { loginUser } from "../../api/controller/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { Platform } from "react-native";
+import { loadDone } from "../../redux/features/load";
 
 type Props = {};
 type FormValues = {
@@ -21,10 +22,11 @@ type FormValues = {
 const PHONE_REGEX = /^(\+?\d{0,9}[-.\s]?)?\d{9,}$/;
 
 const Login = (props: Props) => {
-  const user = useSelector((state: any) => state?.auth?.user);
+  const user = useSelector((state: any) => state?.auth?.user?.user);
   console.log(user);
 
   useEffect(() => {
+    dispatch(loadDone());
     if (user) {
       user?.role === "distributor"
         ? navigation.navigate("MainDistributor", {
@@ -51,12 +53,20 @@ const Login = (props: Props) => {
     loginUser(data, dispatch, navigation);
   };
   return (
-    <View
+    // <View
+    //   style={{
+    //     flex: 1,
+    //     backgroundColor: "#fff",
+    //     zIndex: 0,
+    //     paddingTop: Platform.OS === "ios" ? 60 : 0,
+    //   }}
+    // >
+    <ScrollView
       style={{
         flex: 1,
-        backgroundColor: "#fff",
-        zIndex: 0,
+        zIndex: 2,
         paddingTop: Platform.OS === "ios" ? 60 : 0,
+        backgroundColor: "#fff",
       }}
     >
       <StatusBar
@@ -65,64 +75,62 @@ const Login = (props: Props) => {
         hidden={false}
         barStyle={"dark-content"}
       />
-
-      <ScrollView style={{ flex: 1, zIndex: 2 }}>
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
-          <Text style={styles.welcomeText}>Welcome to</Text>
-          <Image source={logo} style={styles.logo} />
-          <Text style={styles.nameApp}>One Commune - One Product</Text>
-        </View>
-        <View style={styles.boxInput}>
-          <LoginInput
-            control={control}
-            iconClass={FontAwesome5}
-            iconName={"phone-alt"}
-            label={"Phone number"}
-            secureTextEntry={false}
-            name="phoneNumber"
-            rules={{
-              required: "Email is required",
-              pattern: { value: PHONE_REGEX, message: "Phone is invalid" },
-            }}
-          />
-          <LoginInput
-            control={control}
-            iconClass={FontAwesome5}
-            iconName={"lock"}
-            label={"Password"}
-            secureTextEntry={true}
-            name="password"
-            rules={{
-              required: "Email is required",
-              minLength: {
-                value: 3,
-                message: "Password must be minimum 3 characters long",
-              },
-            }}
-          />
-        </View>
-        <View style={styles.boxForgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </View>
-        <View style={styles.button}>
-          <AwesomeButton
-            backgroundColor={color.Primary}
-            textColor="#fff"
-            backgroundActive="#8CEC89"
-            backgroundShadow="#8CEC89"
-            backgroundProgress="#8CEC89"
-            backgroundDarker="#8CEC89"
-            textSize={24}
-            borderRadius={20}
-            width={windowWidth * 0.8}
-            height={windowHeight * 0.07}
-            onPressIn={handleSubmit(onSubmit)}
-          >
-            Login
-          </AwesomeButton>
-        </View>
-      </ScrollView>
-    </View>
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <Text style={styles.welcomeText}>Welcome to</Text>
+        <Image source={logo} style={styles.logo} />
+        <Text style={styles.nameApp}>One Commune - One Product</Text>
+      </View>
+      <View style={styles.boxInput}>
+        <LoginInput
+          control={control}
+          iconClass={FontAwesome5}
+          iconName={"phone-alt"}
+          label={"Phone number"}
+          secureTextEntry={false}
+          name="phoneNumber"
+          rules={{
+            required: "Phone is required",
+            pattern: { value: PHONE_REGEX, message: "Phone is invalid" },
+          }}
+        />
+        <LoginInput
+          control={control}
+          iconClass={FontAwesome5}
+          iconName={"lock"}
+          label={"Password"}
+          secureTextEntry={true}
+          name="password"
+          rules={{
+            required: "Phone is required",
+            minLength: {
+              value: 3,
+              message: "Password must be minimum 3 characters long",
+            },
+          }}
+        />
+      </View>
+      <View style={styles.boxForgotPassword}>
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      </View>
+      <View style={styles.button}>
+        <AwesomeButton
+          backgroundColor={color.Primary}
+          textColor="#fff"
+          backgroundActive="#8CEC89"
+          backgroundShadow="#8CEC89"
+          backgroundProgress="#8CEC89"
+          backgroundDarker="#8CEC89"
+          textSize={24}
+          borderRadius={20}
+          width={windowWidth * 0.8}
+          height={windowHeight * 0.07}
+          onPressIn={handleSubmit(onSubmit)}
+        >
+          Login
+        </AwesomeButton>
+      </View>
+    </ScrollView>
+    // </View>
   );
 };
 

@@ -19,13 +19,13 @@ export const instance = axios.create({
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
-    Authorization: ""
-  }
+    Authorization: "",
+  },
 });
 
 // export const createAxios = (user, dispatch, loginUpdate) => {
 //   const newInstance = axios.create({
-//     baseURL: "https://api.quangdinh.me"
+//     baseURL: API_URL,
 //   });
 //   newInstance.interceptors.request.use(
 //     async (config) => {

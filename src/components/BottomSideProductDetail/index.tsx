@@ -21,7 +21,7 @@ type Props = {
 const BottomSideProductDetail: React.FC<Props> = ({ price }) => {
   const navigation = useNavigation();
 
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: any) => state.auth.user.user);
 
   return (
     <View style={[styles.container, styles.shadow]}>

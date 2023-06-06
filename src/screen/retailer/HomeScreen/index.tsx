@@ -16,6 +16,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useSelector } from "react-redux";
 import SearchBar from "../../../components/SearchBar";
 import ItemOrderView_2 from "../../../components/ItemOrderView_2";
+import { getGeolocation } from "../../../helper/getGeolocation";
 
 type Props = {};
 const DATA: any[] = [
@@ -46,7 +47,7 @@ const DATA: any[] = [
 ];
 const HomeScreen = (props: Props) => {
   const navigation = useNavigation();
-  const user = useSelector((state: any) => state?.auth?.user);
+  const user = useSelector((state: any) => state?.auth?.user.user);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -81,6 +82,7 @@ const HomeScreen = (props: Props) => {
 
   const [searchPhrase, setSearchPhrase] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
+
   return (
     <View style={{ backgroundColor: "#FFFFFF", flex: 1, paddingBottom: 100 }}>
       <StatusBar
@@ -100,9 +102,6 @@ const HomeScreen = (props: Props) => {
           zIndex: 2,
           paddingHorizontal: 12,
         }}
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
         renderItem={({ item }) => <ItemOrderView_2 isShowStatus={true} />}
       />
     </View>

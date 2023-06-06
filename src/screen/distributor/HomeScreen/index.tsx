@@ -33,7 +33,7 @@ const DATA: any[] = [
   },
 ];
 const HomeScreen = (props: Props) => {
-  const user = useSelector((state: any) => state?.auth?.user);
+  const user = useSelector((state: any) => state?.auth?.user.user);
   // console.log("HOme", user);
   const [selectList, setSelectList] = useState<number>(1);
 

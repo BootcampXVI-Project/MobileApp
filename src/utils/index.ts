@@ -2,7 +2,7 @@ import { Dimensions } from "react-native";
 export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;
 
-export const GOOGLE_MAPS_APIKEY = "AIzaSyDnLqxxm-krLEHIedWbsM-6fKdHrs6j7C8";
+export const GOOGLE_MAPS_APIKEY = "AIzaSyDhW90W_VU5O-fhuFGiwD56_nGMfBK0_W4";
 export const API_URL = "https://f20f59bc6393.ngrok.app";
 export const shadow = {
   shadowColor: "#000",

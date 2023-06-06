@@ -1,35 +1,74 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { color } from "../../utils";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Modal,
+  Platform,
+} from "react-native";
+import { color, windowWidth } from "../../utils";
 import { formatNumberWithCommas } from "../../helper/money";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import ImageViewer from "react-native-image-zoom-viewer-fixed";
+
 type Props = {
   data: any;
+  // setIsImageViewVisible: any;
 };
 
 const ProductInfor: React.FC<Props> = ({ data }) => {
   //   console.log(data);
+  const [isImageViewVisible, setIsImageViewVisible] = useState<boolean>(false);
+  const [isCertificateViewVisible, setIsCertificateViewVisible] =
+    useState<boolean>(false);
+
   return (
     <View style={[styles.container, styles.shadow]}>
-      <Text
+      <View
         style={{
-          fontFamily: "RobotoSlab-Bold",
-          fontSize: 20,
-          marginVertical: 2,
-        }}
-        numberOfLines={1}
-      >
-        {data?.productName}
-      </Text>
-      <Text
-        style={{
-          fontFamily: "RobotoSlab-SemiBold",
-          fontSize: 18,
-          color: color.Primary,
-          marginVertical: 2,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        {formatNumberWithCommas(data?.price)}
-      </Text>
+        <View>
+          <Text
+            style={{
+              fontFamily: "RobotoSlab-Bold",
+              fontSize: 20,
+              marginVertical: 2,
+            }}
+            numberOfLines={1}
+          >
+            {data?.productName}
+          </Text>
+          <Text
+            style={{
+              fontFamily: "RobotoSlab-SemiBold",
+              fontSize: 18,
+              color: color.Primary,
+              marginVertical: 2,
+            }}
+          >
+            {formatNumberWithCommas(data?.price)}
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={[styles.shadow, { marginRight: 20 }]}
+          onPress={() => {
+            setIsImageViewVisible((prevState: boolean) => {
+              return !prevState;
+            });
+          }}
+        >
+          <Image
+            source={{ uri: data.qrCode }}
+            style={{ width: 60, height: 60 }}
+          />
+        </TouchableOpacity>
+      </View>
       <Text
         style={{
           fontFamily: "RobotoSlab-VariableFont_wght",
@@ -39,6 +78,76 @@ const ProductInfor: React.FC<Props> = ({ data }) => {
       >
         {data?.description}
       </Text>
+      <TouchableOpacity
+        onPress={() => {
+          setIsCertificateViewVisible((prevState: boolean) => {
+            return !prevState;
+          });
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "RobotoSlab-VariableFont_wght",
+            marginVertical: 4,
+            color: "blue",
+          }}
+          numberOfLines={1}
+        >
+          View Certificate
+        </Text>
+      </TouchableOpacity>
+      <Modal visible={isImageViewVisible}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: color.Primary,
+            width: windowWidth * 0.1,
+            height: windowWidth * 0.1,
+            borderRadius: windowWidth * 0.05,
+            position: "absolute",
+            top: Platform.OS === "ios" ? 40 : 10,
+            right: 20,
+            zIndex: 11,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => setIsImageViewVisible(!isImageViewVisible)}
+        >
+          <AntDesign name="close" size={24} color="#fff" />
+        </TouchableOpacity>
+        <View style={{ flex: 1 }}>
+          <ImageViewer
+            imageUrls={[{ url: data.qrCode }]}
+            style={{ top: -18 }}
+            backgroundColor={"#fff"}
+          />
+        </View>
+      </Modal>
+      <Modal visible={isCertificateViewVisible}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: color.Primary,
+            width: windowWidth * 0.1,
+            height: windowWidth * 0.1,
+            borderRadius: windowWidth * 0.05,
+            position: "absolute",
+            top: Platform.OS === "ios" ? 40 : 10,
+            right: 20,
+            zIndex: 11,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => setIsCertificateViewVisible(!isCertificateViewVisible)}
+        >
+          <AntDesign name="close" size={24} color="#fff" />
+        </TouchableOpacity>
+        <View style={{ flex: 1 }}>
+          <ImageViewer
+            imageUrls={[{ url: data?.certificateUrl }]}
+            style={{ top: -18 }}
+            backgroundColor={"#fff"}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };

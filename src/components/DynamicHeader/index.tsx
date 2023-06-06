@@ -24,6 +24,7 @@ import { Avatar } from "react-native-paper";
 import ItemOrderView from "../ItemOrderView";
 import { color } from "../../utils";
 import { titleCase } from "../../helper/titleCase";
+import { useSelector } from "react-redux";
 // import SearchBar from "../Search/SearchBar";
 
 const wait = (timeout: any) => {
@@ -88,6 +89,7 @@ function App({
   //     setRefreshing(true);
   //     wait(2000).then(() => setRefreshing(false));
   //   }, []);
+  const user = useSelector((state: any) => state?.auth?.user?.user);
 
   return (
     <View style={styles.container}>
@@ -161,8 +163,9 @@ function App({
           <Avatar.Image
             size={60}
             source={{
-              uri: "https://scontent.fdad1-2.fna.fbcdn.net/v/t39.30808-6/341705679_1287746178476881_2371243465129259174_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=NDvMwKLYG3EAX8EUJm-&_nc_ht=scontent.fdad1-2.fna&oh=00_AfDbGToEXGsCcHRfWyr3AzGgaTiWYcwecQ-VCIuOz76gDg&oe=647A8995",
+              uri: user.avatar,
             }}
+            style={{ backgroundColor: "transparent" }}
           />
         </Animated.View>
       </AnimatedImageBackground>

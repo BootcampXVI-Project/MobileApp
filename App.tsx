@@ -1,6 +1,8 @@
+import "react-native-gesture-handler";
+
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, Platform } from "react-native";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { persistor, store } from "./src/redux/store";
 import { App as MainNavigation } from "./src/navigation/main";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -9,8 +11,8 @@ import { LogBox } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import useFonts from "./src/hooks/useFonts";
 import { PersistGate } from "redux-persist/integration/react";
-import moment from "moment";
 import FlashMessage from "react-native-flash-message";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -49,14 +51,21 @@ export default function App() {
   if (!IsReady) {
     return null;
   }
+  // const load = useSelector((state: any) => state.load.loading);
+  // console.log(load);
 
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <SafeAreaProvider style={styles.container} onLayout={onLayoutRootView}>
-          <FlashMessage position="top" />
-          <MainNavigation />
-        </SafeAreaProvider>
+        <GestureHandlerRootView style={styles.container}>
+          <SafeAreaProvider
+            style={styles.container}
+            onLayout={onLayoutRootView}
+          >
+            <FlashMessage position="top" />
+            <MainNavigation />
+          </SafeAreaProvider>
+        </GestureHandlerRootView>
       </PersistGate>
     </Provider>
   );

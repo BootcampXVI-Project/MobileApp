@@ -10,11 +10,15 @@ type Props = {
 };
 
 const TimeLineProduct: React.FC<Props> = ({ data }) => {
+  const filteredDates = data.filter(
+    (date: any) => date.actor !== "retailer" && date.actor !== "consumer"
+  );
+
   //   console.log(data);
   return (
     <View style={[styles.container, styles.shadow]}>
       <Timeline
-        data={data}
+        data={filteredDates}
         circleSize={24}
         circleColor={color.Primary}
         lineColor={color.Primary}

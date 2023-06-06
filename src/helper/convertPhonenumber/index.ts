@@ -1,5 +1,6 @@
 export function convertPhoneNumberTo0(phoneNumber: string): string {
   // Xóa ký tự "+" và khoảng trắng (nếu có)
+
   const cleanedNumber = phoneNumber.replace(/[+\s]/g, "");
 
   // Kiểm tra xem số điện thoại có đúng định dạng không

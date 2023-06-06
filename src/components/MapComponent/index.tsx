@@ -8,6 +8,7 @@ import { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_MAPS_APIKEY, color, getDelta } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
+import Loading from "../Load";
 
 type Props = {};
 
@@ -89,7 +90,9 @@ const MapComponent: React.FC<Props> = ({}) => {
             />
           )}
         </MapView>
-      ) : null}
+      ) : (
+        <Loading />
+      )}
       <TouchableOpacity
         style={styles.inforMap}
         activeOpacity={1}

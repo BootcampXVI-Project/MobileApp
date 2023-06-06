@@ -7,19 +7,20 @@ import {
   logoutSuccess,
   setUser,
 } from "../../../redux/features/auth";
+import { loadDone, loadStart } from "../../../redux/features/load";
 import { instance as api } from "../../initial";
 
 export const loginUser = async (user: any, dispatch: any, navigation: any) => {
-  dispatch(loginStart());
+  dispatch(loadStart());
   try {
     let { phoneNumber, password } = user;
     phoneNumber = convertPhoneNumberTo84(phoneNumber);
-    console.log(phoneNumber);
+    // console.log(phoneNumber);
     const res = await api.post("/auth/login", { phoneNumber, password });
     console.log(res.data);
     if (res.status === 200) {
       dispatch(setUser(res.data.data));
-      res.data.data?.role === "distributor"
+      res.data?.data?.user?.role === "distributor"
         ? navigation.navigate("MainDistributor", {
             screen: "Home",
             initial: false,
@@ -28,6 +29,7 @@ export const loginUser = async (user: any, dispatch: any, navigation: any) => {
             screen: "Home",
             initial: false,
           });
+      dispatch(loadDone());
     }
   } catch (error: any) {
     if (error.response) {
@@ -40,14 +42,16 @@ export const loginUser = async (user: any, dispatch: any, navigation: any) => {
       // Xử lý các lỗi khác
       console.log("Error:", error.message);
     }
+    dispatch(loadDone());
   }
 };
 export const logoutUser = async (dispatch: any, navigation: any) => {
-  dispatch(logoutStart());
+  dispatch(loadStart());
   try {
     dispatch(logoutSuccess());
     navigation.navigate("Login");
+    dispatch(loadDone());
   } catch (error) {
-    dispatch(logoutFailed());
+    dispatch(loadDone());
   }
 };

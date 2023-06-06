@@ -26,7 +26,7 @@ const Profile: React.FC<Props> = ({ profile }) => {
   const navigation = useNavigation();
   const HEADER_HEIGHT_EXPANDED = 20;
   const HEADER_HEIGHT_NARROWED = Platform.OS === "ios" ? 60 : 8;
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: any) => state?.auth?.user?.user);
 
   const getPermissionAsync = async () => {
     const permissionResult =
@@ -72,10 +72,9 @@ const Profile: React.FC<Props> = ({ profile }) => {
           // style={styles.Image}
           size={160}
           source={{
-            uri: !image
-              ? "https://scontent.fdad1-2.fna.fbcdn.net/v/t39.30808-6/341705679_1287746178476881_2371243465129259174_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=NDvMwKLYG3EAX8EUJm-&_nc_ht=scontent.fdad1-2.fna&oh=00_AfDbGToEXGsCcHRfWyr3AzGgaTiWYcwecQ-VCIuOz76gDg&oe=647A8995"
-              : image,
+            uri: !image ? user?.avatar : image,
           }}
+          style={{ backgroundColor: "transparent" }}
         />
       </TouchableOpacity>
       <Text style={styles.name}>

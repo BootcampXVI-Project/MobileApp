@@ -90,8 +90,7 @@ const ORDER = {
         status: "",
         description:
           "Dưa hấu Hàm Ninh, Quảng Bình ngọt ngào như tấm lòng người miền Trung",
-        certificateUrl:
-          "https://baoquangbinh.vn/dataimages/202305/original/images1538078385_5_copy.jpg",
+        certificateUrl: "https://www.sanela.eu/files/certificates/dfd-dfd.jpg",
         supplierId: "5d131a98-4649-4e86-8bce-de325544b5ab",
         qrCode:
           "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/qrcode%2Fproducts%2FProduct2.jpg?alt=media&token=6b7f89c7-32b7-40fc-970f-36071ef938b5&_gl=1*da8zmd*_ga*MTI4NDc3NzYwMi4xNjc5MjAwMzQz*_ga_CW55HF8NVT*MTY4NTg3Mzk0Ni41LjEuMTY4NTg3NDg4Ni4wLjAuMA..",
@@ -162,8 +161,7 @@ const ORDER = {
         status: "",
         description:
           "Dưa vàng Kim Vương được chứng nhận OCOP của thành phố Hà Nội",
-        certificateUrl:
-          "https://ocopvietnam.com.vn/upload/images/1658154472131.jpg",
+        certificateUrl: "https://www.sanela.eu/files/certificates/dfd-dfd.jpg",
         supplierId: "5d131a98-4649-4e86-8bce-de325544b5ab",
         qrCode:
           "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/qrcode%2Fproducts%2FProduct3.jpg?alt=media&token=c0f8b3c8-15cb-4dbc-9105-464f19a6580c&_gl=1*z3mjky*_ga*MTI4NDc3NzYwMi4xNjc5MjAwMzQz*_ga_CW55HF8NVT*MTY4NTg3Mzk0Ni41LjEuMTY4NTg3NDg4OS4wLjAuMA..",

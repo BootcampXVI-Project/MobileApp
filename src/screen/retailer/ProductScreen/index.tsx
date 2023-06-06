@@ -5,8 +5,9 @@ import {
   FlatList,
   TouchableOpacity,
   Platform,
+  Modal,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { color, windowWidth } from "../../../utils";
 import { FontAwesome } from "@expo/vector-icons";
@@ -18,6 +19,7 @@ import { useSelector } from "react-redux";
 import Quantity from "../../../components/QuantityProduct";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import ImageViewer from "react-native-image-zoom-viewer-fixed";
 
 type Props = {};
 
@@ -122,7 +124,10 @@ const ProductScreen = (props: Props) => {
         ListHeaderComponent={() => (
           <View style={{ flex: 1, marginTop: 10 }}>
             <Slide item={item?.product} />
-            <ProductInfor data={item?.product} />
+            <ProductInfor
+              data={item?.product}
+              //   setIsImageViewVisible={setIsImageViewVisible}
+            />
             <TimeLineProduct data={item?.product.dates} />
           </View>
         )}
