@@ -1,16 +1,15 @@
 import React from "react";
+import Quantity from "../QuantityProduct";
+import { windowHeight, windowWidth } from "../../utils";
+import Swipeable from "react-native-gesture-handler/Swipeable";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+
 type Props = {
   item: {
     product: any;
     quantity: string;
   };
 };
-
-import Swipeable from "react-native-gesture-handler/Swipeable";
-import { windowHeight, windowWidth } from "../../utils";
-import Quantity from "../QuantityProduct";
-
 const rightSwipeActions = () => {
   return (
     <View

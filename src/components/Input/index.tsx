@@ -1,10 +1,10 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
 import styles from "./style";
-import { Kohana } from "react-native-textinput-effects";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { color, windowHeight } from "../../utils";
+import React, { useState } from "react";
 import { Controller } from "react-hook-form";
+import { color, windowHeight } from "../../utils";
+import { Kohana } from "react-native-textinput-effects";
+import { Text, TouchableOpacity, View } from "react-native";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 type Props = {
   iconClass: any;

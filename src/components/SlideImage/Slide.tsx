@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Carousel, {
   ParallaxImage,
@@ -6,6 +5,7 @@ import Carousel, {
 } from "react-native-new-snap-carousel";
 import RenderSlide from "./RenderSlide";
 import { windowWidth } from "../../utils";
+import { StyleSheet, Text, View } from "react-native";
 
 const Slide = ({ item }: { item: any }) => {
   // console.log(item);

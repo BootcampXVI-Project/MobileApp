@@ -1,7 +1,7 @@
 import React from "react";
-import { GestureResponderEvent, TouchableOpacity, View } from "react-native";
 import { useSnapshot } from "valtio";
 import { state } from "./store";
+import { GestureResponderEvent, TouchableOpacity, View } from "react-native";
 
 const Stroke = ({
   onPress,

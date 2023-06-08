@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +7,7 @@ import {
   Modal,
   Platform,
 } from "react-native";
+import React, { useState } from "react";
 import { color, windowWidth } from "../../utils";
 import { formatNumberWithCommas } from "../../helper/money";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -52,7 +52,7 @@ const ProductInfor: React.FC<Props> = ({ data }) => {
               marginVertical: 2,
             }}
           >
-            {formatNumberWithCommas(data?.price)}
+            {formatNumberWithCommas(data?.price)} VND
           </Text>
         </View>
         <TouchableOpacity

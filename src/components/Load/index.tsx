@@ -1,5 +1,5 @@
-import AnimatedLottieView from "lottie-react-native";
 import React, { useEffect, useState } from "react";
+import AnimatedLottieView from "lottie-react-native";
 import { View, Platform, StyleSheet } from "react-native";
 
 const Loading: React.FC<{}> = () => {

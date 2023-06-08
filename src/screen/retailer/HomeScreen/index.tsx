@@ -8,46 +8,30 @@ import {
   Platform,
   FlatList,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
-import { color, windowHeight, windowWidth } from "../../../utils";
-import HeaderRetailerHomeScreen from "../../../components/HeaderRetailerHomeScreen";
-import { useNavigation } from "@react-navigation/native";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import { useSelector } from "react-redux";
+import { Product } from "../../../types/models";
 import SearchBar from "../../../components/SearchBar";
-import ItemOrderView_2 from "../../../components/ItemOrderView_2";
-import { getGeolocation } from "../../../helper/getGeolocation";
-
+import { useDispatch, useSelector } from "react-redux";
+import PRODUCT from "../../../../assets/products.json";
+import NewProduct from "../../../components/NewProduct";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import PopularProduct from "../../../components/PopularProduct";
+import { color, windowHeight, windowWidth } from "../../../utils";
+import React, { useLayoutEffect, useState, useEffect } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import HeaderRetailerHomeScreen from "../../../components/HeaderRetailerHomeScreen";
 type Props = {};
-const DATA: any[] = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bq96-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-a96-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bdq6-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bdg6-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bda6-145571e29d72",
-  },
-];
+
 const HomeScreen = (props: Props) => {
+  const user = useSelector((state: any) => state?.auth?.user);
+
   const navigation = useNavigation();
-  const user = useSelector((state: any) => state?.auth?.user.user);
+  const dispatch = useDispatch();
+  // const [order, setOrder] = useState();
+
+  // const getAllOrdersofRetailer = async () => {
+  //   const result = await getAllOrders(user.token, dispatch);
+  //   // setOrder(result);
+  // };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -55,7 +39,7 @@ const HomeScreen = (props: Props) => {
         backgroundColor: color.Primary,
       },
       headerTitle: (props: any) => (
-        <HeaderRetailerHomeScreen {...props} user={user} />
+        <HeaderRetailerHomeScreen {...props} user={user.user} />
       ),
       headerTitleAlign: "center",
       headerRight: () => (
@@ -79,6 +63,12 @@ const HomeScreen = (props: Props) => {
       ),
     });
   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      // getAllOrdersofRetailer();
+      return () => {};
+    }, [])
+  );
 
   const [searchPhrase, setSearchPhrase] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
@@ -97,12 +87,56 @@ const HomeScreen = (props: Props) => {
         setClicked={setClicked}
       />
       <FlatList
-        data={DATA}
-        style={{
-          zIndex: 2,
-          paddingHorizontal: 12,
-        }}
-        renderItem={({ item }) => <ItemOrderView_2 isShowStatus={true} />}
+        style={{ flex: 1, backgroundColor: "#fff" }}
+        data={[]}
+        keyExtractor={(_e: any, i: { toString: () => string }) =>
+          "dom" + i.toString()
+        }
+        ListEmptyComponent={null}
+        renderItem={null}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={() => (
+          <>
+            <Text style={[styles.title, { marginHorizontal: 16 }]}>
+              Popular Product
+            </Text>
+            <FlatList
+              horizontal
+              data={PRODUCT?.data}
+              keyExtractor={(item) => item.productId}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({
+                item,
+                index,
+              }: {
+                item: Product;
+                index: number;
+              }) => {
+                return (
+                  <PopularProduct
+                    product={item}
+                    key={item.productId}
+                    index={index}
+                  />
+                );
+              }}
+            />
+            <Text style={[styles.title, { marginHorizontal: 16 }]}>
+              New Product
+            </Text>
+            <FlatList
+              data={PRODUCT?.data}
+              keyExtractor={(item) => item.productId}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }: { item: Product }) => {
+                return <NewProduct product={item} key={item.productId} />;
+              }}
+              style={{ marginHorizontal: 16 }}
+            />
+          </>
+        )}
       />
     </View>
   );
@@ -110,4 +144,11 @@ const HomeScreen = (props: Props) => {
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  title: {
+    fontFamily: "RobotoSlab-SemiBold",
+    fontSize: 18,
+    marginTop: 12,
+    marginBottom: 6,
+  },
+});

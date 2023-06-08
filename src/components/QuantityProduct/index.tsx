@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
+import { color, windowWidth } from "../../utils";
+import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 // import {
 //   updateCart_minus_api,
 //   updateCart_plus_api,
 // } from "../../api/controller/cart/updateCart";
-import { useDispatch, useSelector } from "react-redux";
-import { color, windowWidth } from "../../utils";
 
 type Props = {
   data?: any;

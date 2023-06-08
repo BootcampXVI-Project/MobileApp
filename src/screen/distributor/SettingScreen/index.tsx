@@ -1,17 +1,17 @@
 import {
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
   View,
   Text,
   StatusBar,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { logoutUser } from "../../../api/controller/auth";
-import { useDispatch } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import Profile from "../../../components/Profile";
 import { color } from "../../../utils";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../../api/auth";
+import Profile from "../../../components/Profile";
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = {};

@@ -1,9 +1,9 @@
-import { Text, TouchableOpacity, View, Image } from "react-native";
-import React, { useState } from "react";
+import Tag from "../Tag";
 import styles from "./style";
 import { color } from "../../utils";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import Tag from "../Tag";
+import { Text, TouchableOpacity, View, Image } from "react-native";
 
 type Props = {
   isShowStatus?: boolean;

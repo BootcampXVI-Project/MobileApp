@@ -7,11 +7,11 @@ import {
   StatusBar,
 } from "react-native";
 import React from "react";
-import { logoutUser } from "../../../api/controller/auth";
-import { useDispatch } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import Profile from "../../../components/Profile";
 import { color } from "../../../utils";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../../api/auth";
+import Profile from "../../../components/Profile";
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = {};
@@ -22,14 +22,43 @@ const SettingScreen = (props: Props) => {
 
   return (
     // <SafeAreaView style={styles.container}>
-    <ScrollView style={styles.container}>
-      <StatusBar
-        animated={true}
-        backgroundColor={color.Primary}
-        barStyle={"light-content"}
-      />
+    <View style={{ paddingBottom: 120, flex: 1, backgroundColor: "#fff" }}>
+      <ScrollView style={styles.container}>
+        <StatusBar
+          animated={true}
+          backgroundColor={color.Primary}
+          barStyle={"light-content"}
+        />
 
-      <Profile profile={{}} />
+        <Profile profile={{}} />
+        <View style={{ height: 12 }} />
+        <TouchableOpacity
+          style={[
+            {
+              backgroundColor: "#fff",
+              paddingHorizontal: 12,
+              paddingVertical: 12,
+              marginHorizontal: 12,
+              borderRadius: 12,
+              marginBottom: 12,
+            },
+            styles.shadow,
+          ]}
+          onPress={() => {
+            navigation.navigate("HistoryOrderScreen");
+          }}
+        >
+          <Text
+            style={{
+              color: color.Primary,
+              fontFamily: "RobotoSlab-Bold",
+              fontSize: 18,
+            }}
+          >
+            Your order
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
       <TouchableOpacity
         onPress={() => {
           logoutUser(dispatch, navigation);
@@ -46,8 +75,7 @@ const SettingScreen = (props: Props) => {
           Logout
         </Text>
       </TouchableOpacity>
-    </ScrollView>
-    // </SafeAreaView>
+    </View>
   );
 };
 
@@ -66,5 +94,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     borderRadius: 12,
     alignItems: "center",
+  },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+
+    elevation: 4,
   },
 });

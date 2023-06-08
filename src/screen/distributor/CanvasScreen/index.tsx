@@ -7,14 +7,13 @@ import {
   useWindowDimensions,
   TouchableOpacity,
 } from "react-native";
-
-import { SketchCanvas, SketchCanvasRef } from "rn-perfect-sketch-canvas";
+import styles from "./style";
 import { useSnapshot } from "valtio";
 import Header from "../../../components/SketchComponent/Header";
 import Toolbar from "../../../components/SketchComponent/Toolbar";
 import { state } from "../../../components/SketchComponent/store";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import styles from "./style";
+import { SketchCanvas, SketchCanvasRef } from "rn-perfect-sketch-canvas";
 
 export default function CanvasScreen() {
   const navigation = useNavigation();

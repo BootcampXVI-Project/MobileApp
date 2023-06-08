@@ -5,13 +5,12 @@ import {
   View,
   Platform,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { color, windowHeight, windowWidth } from "../../utils";
-
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
-import { getGeolocation } from "../../helper/getGeolocation";
 import Loading from "../Load";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { getGeolocation } from "../../helper/getGeolocation";
+import { color, windowHeight, windowWidth } from "../../utils";
 
 type Props = {
   user: any;

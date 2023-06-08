@@ -1,16 +1,9 @@
-import {
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useSelector } from "react-redux";
 import React, { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { color, windowHeight, windowWidth } from "../../../utils";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useSelector } from "react-redux";
+import { color, windowHeight, windowWidth } from "../../../utils";
 import ProductQuantity from "../../../components/ProductQuantity";
 
 type Props = {};
@@ -86,7 +79,7 @@ const data = {
 };
 const CartScreen = (props: Props) => {
   const cart = useSelector((state: any) => state.cart.cart);
-  console.log(cart);
+  // console.log(cart);
   const navigation = useNavigation();
 
   useLayoutEffect(() => {

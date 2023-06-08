@@ -1,14 +1,13 @@
-import React, { MutableRefObject, useState } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
-import type { SketchCanvasRef } from "rn-perfect-sketch-canvas";
-import { state } from "./store";
 import Util from "./utils";
-import { useNavigation } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { firebase } from "../../firebase/firebase";
-import { decodeBase64ToImage } from "../../helper/decodeBase64";
-// import storage from "@react-native-firebase/storage";
+import { state } from "./store";
 import * as FileSystem from "expo-file-system";
+import { firebase } from "../../firebase/firebase";
+import { useNavigation } from "@react-navigation/native";
+import React, { MutableRefObject, useState } from "react";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import type { SketchCanvasRef } from "rn-perfect-sketch-canvas";
+import { decodeBase64ToImage } from "../../helper/decodeBase64";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 
 interface Props {
   canvasRef: MutableRefObject<SketchCanvasRef | null>;

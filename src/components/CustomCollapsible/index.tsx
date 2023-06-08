@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import Accordion from "react-native-collapsible/Accordion";
 import styles from "./style";
-import CardProduct from "../CardProduct";
+import React, { useState } from "react";
 import Slide from "../SlideImage/Slide";
+import CardProduct from "../CardProduct";
+import Accordion from "react-native-collapsible/Accordion";
+import { View, Text, TouchableOpacity } from "react-native";
 const LIST = [
   {
     product: {

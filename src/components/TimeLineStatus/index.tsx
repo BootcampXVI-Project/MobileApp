@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Timeline from "react-native-timeline-flatlist";
 import { color } from "../../utils";
+import React, { useState } from "react";
+import Timeline from "react-native-timeline-flatlist";
 import { convertTimeString } from "../../helper/formatDate";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 type Props = {
   data: any;

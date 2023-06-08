@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
 import { color } from "../../utils";
+import { View, Text, StyleSheet } from "react-native";
 type Props = {
   status: string;
 };

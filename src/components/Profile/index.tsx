@@ -5,17 +5,17 @@ import {
   View,
   Platform,
 } from "react-native";
+import { color } from "../../utils";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Avatar } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
-import { titleCase } from "../../helper/titleCase";
-import { color } from "../../utils";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-// import NullAvatar from "../../../assets/nullavatar.png";
-import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import { titleCase } from "../../helper/titleCase";
+import { useNavigation } from "@react-navigation/native";
+// import NullAvatar from "../../../assets/nullavatar.png";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { convertPhoneNumberTo0 } from "../../helper/convertPhonenumber";
 
 type Props = {

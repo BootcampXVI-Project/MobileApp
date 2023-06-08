@@ -1,40 +1,46 @@
-import { Text, TouchableOpacity, View, Image } from "react-native";
-import React, { useState } from "react";
+import Tag from "../Tag";
 import styles from "./style";
 import { color } from "../../utils";
+import React, { useState } from "react";
+import { Order } from "../../types/models";
 import { useNavigation } from "@react-navigation/native";
-import Tag from "../Tag";
+import { convertTimeString } from "../../helper/formatDate";
+import { formatNumberWithCommas } from "../../helper/money";
+import { Text, TouchableOpacity, View, Image } from "react-native";
 
 type Props = {
   isShowStatus?: boolean;
-  selectList?: number;
+  item: Order;
 };
-const IMAGE_STATUS = {
-  delivery:
+
+type ImageStatus = {
+  [key: string]: any;
+};
+
+const IMAGE_STATUS: ImageStatus = {
+  shipping:
     "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fpngegg-removebg-preview.png?alt=media&token=ad88a806-2534-4b8e-83b3-39ff7b9267c4&_gl=1*1mi6w16*_ga*MjQ1MDY3NTA3LjE2ODQ5MTY0MzI.*_ga_CW55HF8NVT*MTY4NTY5ODg1Ni4xMC4xLjE2ODU2OTkxNTYuMC4wLjA.",
   pending:
     "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fpending-icon-512x504-9zrlrc78-removebg-preview.png?alt=media&token=db8619b0-1b40-41bb-b5e6-e01b93e284ab&_gl=1*isird*_ga*MjQ1MDY3NTA3LjE2ODQ5MTY0MzI.*_ga_CW55HF8NVT*MTY4NTc3MTMzMy4xMS4xLjE2ODU3NzEzNDAuMC4wLjA.",
-  delivered:
+  shipped:
     "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fshipped.png?alt=media&token=5508cc3e-c5a0-4a33-aca9-11b63f7a4137&_gl=1*4cmtqe*_ga*MjQ1MDY3NTA3LjE2ODQ5MTY0MzI.*_ga_CW55HF8NVT*MTY4NTc3MTMzMy4xMS4xLjE2ODU3NzE1OTkuMC4wLjA.",
 };
 
-const ItemOrderView_2: React.FC<Props> = ({
-  isShowStatus = false,
-  selectList = 0,
-}) => {
+const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
   const navigation = useNavigation();
+  // console.log(item);
 
   return (
     <TouchableOpacity
       style={[styles.container, styles.shadow]}
       onPress={() => {
-        navigation.navigate("OrderDetailScreen");
+        navigation.navigate("OrderDetailScreen", item);
       }}
     >
       <View style={[{ flexDirection: "row" }]}>
         <Image
           source={{
-            uri: IMAGE_STATUS.delivery,
+            uri: IMAGE_STATUS[item?.status.toLowerCase()],
           }}
           style={styles.logo}
           resizeMode={"center"}
@@ -42,27 +48,50 @@ const ItemOrderView_2: React.FC<Props> = ({
         <View style={styles.content}>
           <Text
             style={{
-              color: selectList == 0 ? color.Primary : color.Secondary,
+              color:
+                item?.status.toLowerCase() == "pending"
+                  ? color.Pending
+                  : item?.status.toLowerCase() == "shipping"
+                  ? color.Shipping
+                  : item?.status.toLowerCase() == "shipped"
+                  ? color.Primary
+                  : "rgb(255, 255, 163)",
               fontFamily: "RobotoSlab-Bold",
               fontSize: 18,
             }}
           >
-            2/6/2022 11:43
+            {`${convertTimeString(item.createDate).date}, ${
+              convertTimeString(item.createDate).time
+            }`}
           </Text>
-          <Text style={{ fontFamily: "RobotoSlab-SemiBold", fontSize: 16 }}>
-            {/* Order ID */}
+          <Text
+            style={{ fontFamily: "RobotoSlab-VariableFont_wght", fontSize: 14 }}
+          >
+            Have {item.productItemList.length} product
           </Text>
           {isShowStatus ? (
             <View>
               <Tag
                 backgroundColor={
-                  selectList == 0
+                  item?.status.toLowerCase() == "pending"
+                    ? "#ffe3ab"
+                    : item?.status.toLowerCase() == "shipping"
+                    ? "#5a93e8"
+                    : item?.status.toLowerCase() == "shipped"
                     ? "rgb(163, 255, 163)"
-                    : "rgba(250, 204, 21, 0.32)"
+                    : "rgb(255, 255, 163)"
                 }
-                color={selectList == 0 ? color.Primary : color.Secondary}
+                color={
+                  item?.status.toLowerCase() == "pending"
+                    ? color.Pending
+                    : item?.status.toLowerCase() == "shipping"
+                    ? color.Shipping
+                    : item?.status.toLowerCase() == "shipped"
+                    ? color.Primary
+                    : "rgb(255, 255, 163)"
+                }
                 fontSize={16}
-                text="Finish delivery"
+                text={item?.status}
               />
             </View>
           ) : (
@@ -73,12 +102,19 @@ const ItemOrderView_2: React.FC<Props> = ({
       <View style={[styles.price, { paddingHorizontal: 14 }]}>
         <Text
           style={{
-            color: selectList == 0 ? color.Primary : color.Secondary,
+            color:
+              item?.status.toLowerCase() == "pending"
+                ? color.Pending
+                : item?.status.toLowerCase() == "shipping"
+                ? color.Shipping
+                : item?.status.toLowerCase() == "shipped"
+                ? color.Primary
+                : "rgb(255, 255, 163)",
             fontFamily: "RobotoSlab-Bold",
             fontSize: 16,
           }}
         >
-          120.0$
+          {formatNumberWithCommas("120000")} VND
         </Text>
       </View>
     </TouchableOpacity>

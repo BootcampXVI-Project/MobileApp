@@ -1,7 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { windowHeight, windowWidth } from "../../utils";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type Props = {
   title: string;
   styleTitle: any;

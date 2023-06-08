@@ -1,25 +1,26 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../../screen/LoginScreen";
-import { TabsDistributor, TabsRetailer } from "../tabs";
-import DetailProductScreen from "../../screen/distributor/DetailProductScreen";
-import DistributorMapScreen from "../../screen/distributor/MapScreen";
-import RetailerMapScreen from "../../screen/retailer/MapScreen";
-
-import CanvasScreen from "../../screen/distributor/CanvasScreen";
 import { useSelector } from "react-redux";
-import CartScreen from "../../screen/retailer/CartScreen";
-import OrderDetailScreen from "../../screen/retailer/OrderDetailScreen";
-import ProductScreen from "../../screen/retailer/ProductScreen";
-import ReactNativeModal from "react-native-modal";
 import Loading from "../../components/Load";
+import Login from "../../screen/LoginScreen";
+import ReactNativeModal from "react-native-modal";
+import { TabsDistributor, TabsRetailer } from "../tabs";
+import CartScreen from "../../screen/retailer/CartScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import RetailerMapScreen from "../../screen/retailer/MapScreen";
+import ProductScreen from "../../screen/retailer/ProductScreen";
+import CanvasScreen from "../../screen/distributor/CanvasScreen";
+import DistributorMapScreen from "../../screen/distributor/MapScreen";
+import OrderDetailScreen from "../../screen/retailer/OrderDetailScreen";
+import HistoryOrderScreen from "../../screen/retailer/HistoryOrderScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import DetailProductScreen from "../../screen/distributor/DetailProductScreen";
+
 const Stack = createNativeStackNavigator();
 
 export function App() {
   const user = useSelector((state: any) => state?.auth?.user?.user);
   const load = useSelector((state: any) => state.load.loading);
 
-  console.log(user);
+  // console.log(user);
 
   return (
     <>
@@ -83,6 +84,11 @@ export function App() {
             name="ProductScreen"
             // options={{ headerShown: false }}
             component={ProductScreen}
+          />
+          <Stack.Screen
+            name="HistoryOrderScreen"
+            // options={{ headerShown: false }}
+            component={HistoryOrderScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

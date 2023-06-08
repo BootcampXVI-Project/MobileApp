@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { useSnapshot } from "valtio";
-import constants from "./constants";
-import { state } from "./store";
 import utils from "./utils";
 import Color from "./Color";
 import Stroke from "./Stroke";
+import { state } from "./store";
+import constants from "./constants";
+import { useSnapshot } from "valtio";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 const Toolbar = () => {
   const [showStrokes, setShowStrokes] = useState(false);

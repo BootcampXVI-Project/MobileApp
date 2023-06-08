@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import Timeline from "react-native-timeline-flatlist";
 import { color } from "../../utils";
+import React, { useState } from "react";
+import { ProductDate } from "../../types/models";
+import Timeline from "react-native-timeline-flatlist";
 import { convertTimeString } from "../../helper/formatDate";
-import ImageView from "react-native-image-view";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 type Props = {
-  data: any;
+  data: ProductDate[];
 };
 
 const TimeLineProduct: React.FC<Props> = ({ data }) => {
   const filteredDates = data.filter(
-    (date: any) => date.actor !== "retailer" && date.actor !== "consumer"
+    (date: any) => date?.status !== "sold" && date?.status !== "selling"
   );
 
-  //   console.log(data);
+  // console.log(data);
   return (
     <View style={[styles.container, styles.shadow]}>
       <Timeline
@@ -35,26 +35,30 @@ const TimeLineProduct: React.FC<Props> = ({ data }) => {
         style={{ paddingTop: 5 }}
         isUsingFlatlist={true}
         innerCircle={"dot"}
-        renderDetail={(rowData) => {
+        renderDetail={(rowData: ProductDate) => {
           return (
             <View style={{ flex: 1, top: -10 }}>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
                 Responsible:{" "}
-                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>Parker</Text>
+                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>
+                  {rowData?.actor?.fullName}
+                </Text>
               </Text>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
                 Address:{" "}
-                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>Da Nang</Text>
+                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>
+                  {rowData?.actor?.address}
+                </Text>
               </Text>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
                 Status:{" "}
                 <Text
                   style={{
-                    fontFamily: "RobotoSlab-Medium",
+                    fontFamily: "RobotoSlab-SemiBold",
                     color: color.Primary,
                   }}
                 >
-                  {rowData.status}
+                  {rowData?.status.toUpperCase()}
                 </Text>
               </Text>
             </View>

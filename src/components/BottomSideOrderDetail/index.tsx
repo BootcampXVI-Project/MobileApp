@@ -5,12 +5,11 @@ import {
   View,
   Platform,
 } from "react-native";
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
 import { color } from "../../utils";
-
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { formatCurrency } from "../../helper/money";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {
   totalPrice: number;
@@ -27,7 +26,7 @@ const BottomSideOrderDetail: React.FC<Props> = ({
 
   return (
     <>
-      {orderStatus === "pending" ? (
+      {orderStatus.toLowerCase() === "pending" ? (
         <View style={[styles.container, styles.shadow]}>
           <TouchableOpacity style={styles.cancelButton}>
             <Text

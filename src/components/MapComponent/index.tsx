@@ -1,14 +1,13 @@
-import { Text, TouchableOpacity, View, Image, Platform } from "react-native";
-import React, { useEffect, useState } from "react";
 import styles from "./style";
+import Loading from "../Load";
 import MapView from "react-native-maps";
-import Device from "expo-device";
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_MAPS_APIKEY, color, getDelta } from "../../utils";
-import { useNavigation } from "@react-navigation/native";
-import Loading from "../Load";
+import { Text, TouchableOpacity, View, Image, Platform } from "react-native";
 
 type Props = {};
 

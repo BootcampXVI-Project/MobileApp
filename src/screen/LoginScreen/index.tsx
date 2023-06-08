@@ -1,18 +1,18 @@
-import { Image, ScrollView, Text, View } from "react-native";
+import styles from "./style";
+import { Platform } from "react-native";
 import React, { useEffect } from "react";
 import { StatusBar } from "react-native";
-import logo from "../../../assets/logo.png";
-import styles from "./style";
-import LoginInput from "../../components/Input";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import AwesomeButton from "react-native-really-awesome-button";
-import { color, windowHeight, windowWidth } from "../../utils";
 import { useForm } from "react-hook-form";
-import { loginUser } from "../../api/controller/auth";
+import { loginUser } from "../../api/auth";
+import logo from "../../../assets/logo.png";
+import LoginInput from "../../components/Input";
+import { loadDone } from "../../redux/features/load";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { Platform } from "react-native";
-import { loadDone } from "../../redux/features/load";
+import { Image, ScrollView, Text, View } from "react-native";
+import AwesomeButton from "react-native-really-awesome-button";
+import { color, windowHeight, windowWidth } from "../../utils";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 type Props = {};
 type FormValues = {
@@ -23,7 +23,7 @@ const PHONE_REGEX = /^(\+?\d{0,9}[-.\s]?)?\d{9,}$/;
 
 const Login = (props: Props) => {
   const user = useSelector((state: any) => state?.auth?.user?.user);
-  console.log(user);
+  // console.log(user);
 
   useEffect(() => {
     dispatch(loadDone());
@@ -48,19 +48,9 @@ const Login = (props: Props) => {
   const dispatch = useDispatch();
 
   const onSubmit = (data: FormValues) => {
-    // Xử lý logic khi submit form
-    // console.log(data);
     loginUser(data, dispatch, navigation);
   };
   return (
-    // <View
-    //   style={{
-    //     flex: 1,
-    //     backgroundColor: "#fff",
-    //     zIndex: 0,
-    //     paddingTop: Platform.OS === "ios" ? 60 : 0,
-    //   }}
-    // >
     <ScrollView
       style={{
         flex: 1,

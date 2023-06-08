@@ -1,8 +1,8 @@
-import { Button, Image, Platform, StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { color, windowHeight, windowWidth } from "../../../utils";
 import { Svg, Defs, Rect, Mask, Path } from "react-native-svg";
+import { color, windowHeight, windowWidth } from "../../../utils";
+import { Button, Image, Platform, StyleSheet, Text, View } from "react-native";
 const ScanScreen = () => {
   const [hasPermission, setHasPermission]: [
     string | boolean | null,
@@ -24,9 +24,11 @@ const ScanScreen = () => {
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
-    setScanned(true);
-    setText(data);
-    console.log("Type: " + type + "\nData: " + data);
+    // setScanned(true);
+    if (data !== text) {
+      setText(data);
+      console.log("Type: " + type + "\nData: " + data);
+    }
   };
   if (hasPermission === null) {
     return (

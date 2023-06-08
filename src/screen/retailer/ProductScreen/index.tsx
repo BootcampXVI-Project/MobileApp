@@ -7,19 +7,17 @@ import {
   Platform,
   Modal,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { color, windowWidth } from "../../../utils";
+import { Product } from "../../../types/models";
 import { FontAwesome } from "@expo/vector-icons";
+import { color, windowWidth } from "../../../utils";
+import React, { useLayoutEffect, useState } from "react";
 import Slide from "../../../components/SlideImage/Slide";
-import ProductInfor from "../../../components/ProductInfor";
-import TimeLineProduct from "../../../components/TimeLineProduct";
-import BottomSideProductDetail from "../../../components/BottomSideProductDetail";
-import { useSelector } from "react-redux";
 import Quantity from "../../../components/QuantityProduct";
+import ProductInfor from "../../../components/ProductInfor";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import TimeLineProduct from "../../../components/TimeLineProduct";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import ImageViewer from "react-native-image-zoom-viewer-fixed";
 
 type Props = {};
 
@@ -28,13 +26,13 @@ const ProductScreen = (props: Props) => {
   const navigation = useNavigation();
 
   //   console.log(route.params);
-  const item = route.params;
+  const item: Product = route.params as Product;
 
   const addtocart = () => {
     // addCart(data);
     showMessage({
       message: "Success",
-      description: `${item?.product?.productName} is added to cart.`,
+      description: `${item?.productName} is added to cart.`,
       textStyle: { fontFamily: "RobotoSlab-VariableFont_wght" },
       titleStyle: { fontFamily: "RobotoSlab-Bold" },
       type: "success",
@@ -51,7 +49,7 @@ const ProductScreen = (props: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: item?.product?.productName,
+      title: item?.productName,
       headerTitleAlign: "center",
       headerTitleStyle: {
         color: "#fff",
@@ -123,17 +121,46 @@ const ProductScreen = (props: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={() => (
           <View style={{ flex: 1, marginTop: 10 }}>
-            <Slide item={item?.product} />
+            <Slide item={item} />
             <ProductInfor
-              data={item?.product}
+              data={item}
               //   setIsImageViewVisible={setIsImageViewVisible}
             />
-            <TimeLineProduct data={item?.product.dates} />
+            <TimeLineProduct data={item?.dates} />
           </View>
         )}
       />
       <View style={[styles.bottomSide, styles.shadow]}>
         <Quantity quantity={1} />
+        <View style={{ width: 1, height: "100%", backgroundColor: "#fff" }} />
+        <View
+          style={{
+            // borderWidth: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "RobotoSlab-Bold",
+              color: "#fff",
+              fontSize: 16,
+            }}
+          >
+            Unit:
+          </Text>
+          <Text
+            style={{
+              fontFamily: "RobotoSlab-Bold",
+              color: "#fff",
+              fontSize: 16,
+            }}
+          >
+            {item.unit}
+          </Text>
+        </View>
+        <View style={{ width: 1, height: "100%", backgroundColor: "#fff" }} />
+
         <TouchableOpacity style={styles.addCartButton} onPress={addtocart}>
           <Text
             style={{

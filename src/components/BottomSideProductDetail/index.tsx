@@ -5,14 +5,14 @@ import {
   View,
   Platform,
 } from "react-native";
+import { color } from "../../utils";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import Quantity from "../QuantityProduct";
 import { Avatar } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
-import { color } from "../../utils";
 import { formatCurrency } from "../../helper/money";
-import Quantity from "../QuantityProduct";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {
   price: number;

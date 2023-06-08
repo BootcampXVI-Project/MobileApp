@@ -1,8 +1,8 @@
-import { Text, TouchableOpacity, View, Image } from "react-native";
-import React, { useState } from "react";
 import styles from "./style";
+import React, { useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Text, TouchableOpacity, View, Image } from "react-native";
 
 type Props = {
   signature: any;

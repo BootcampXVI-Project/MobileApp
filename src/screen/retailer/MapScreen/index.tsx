@@ -1,12 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./style";
-import MapView, { Marker } from "react-native-maps";
-import { GOOGLE_MAPS_APIKEY, getDelta } from "../../../utils";
-import MapViewDirections from "react-native-maps-directions";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Platform } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   location: {
@@ -19,7 +17,7 @@ const MapScreen = (props: Props) => {
   const navigation = useNavigation();
 
   const route = useRoute();
-  console.log(route.params);
+  // console.log(route.params);
   const coordinates: Props = route.params as Props;
   // const { latitudeDelta, longitudeDelta } = getDelta(coordinates);
 

@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Platform } from "react-native";
 import Carousel, {
   ParallaxImage,
   Pagination,
 } from "react-native-new-snap-carousel";
 import { windowWidth } from "../../utils";
+import { StyleSheet, Text, View, Image, Platform } from "react-native";
 
 const RenderSilde = ({
   item,

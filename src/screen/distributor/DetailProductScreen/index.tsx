@@ -5,17 +5,17 @@ import {
   StatusBar,
   ScrollView,
 } from "react-native";
+import styles from "./style";
+import SwipeButton from "rn-swipe-button";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { color, windowHeight, windowWidth } from "../../../utils";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import styles from "./style";
-import CustomCollapsible from "../../../components/CustomCollapsible";
 import MapComponent from "../../../components/MapComponent";
-import SwipeButton from "rn-swipe-button";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import SignatureRetailer from "../../../components/SignatureRetailer";
 import ItemOrderView from "../../../components/ItemOrderView";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { color, windowHeight, windowWidth } from "../../../utils";
+import CustomCollapsible from "../../../components/CustomCollapsible";
+import SignatureRetailer from "../../../components/SignatureRetailer";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const ButtonSwipe = () => {
   return (
@@ -41,7 +41,7 @@ const ButtonSwipe = () => {
 const DetailProductScreen = () => {
   const navigation = useNavigation();
   const [signature, setSignature] = useState<any>(null);
-  console.log(signature);
+  // console.log(signature);
 
   const handleSwipeOrder = () => {};
   useLayoutEffect(() => {

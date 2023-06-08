@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSnapshot } from "valtio";
 import { state } from "./store";
 import Util from "./utils";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Color = ({ color }: { color: string }) => {
   const snap = useSnapshot(state);

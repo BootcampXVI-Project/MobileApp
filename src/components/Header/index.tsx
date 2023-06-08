@@ -1,8 +1,6 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
-import styles from "./style";
-import { useScrollToTop } from "@react-navigation/native";
 import { color } from "../../utils";
+import React, { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   user: any;

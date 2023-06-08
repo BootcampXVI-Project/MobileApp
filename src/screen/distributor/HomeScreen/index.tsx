@@ -8,7 +8,6 @@ import {
   Platform,
 } from "react-native";
 import React, { useState } from "react";
-import Header from "../../../components/Header";
 import { useSelector } from "react-redux";
 import { color, windowHeight } from "../../../utils";
 import DynamicHeader from "../../../components/DynamicHeader";

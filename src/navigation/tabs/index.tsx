@@ -1,17 +1,16 @@
-import DistributorHomeScreen from "../../screen/distributor/HomeScreen";
-import RetailerHomeScreen from "../../screen/retailer/HomeScreen";
-import DistributorSettingScreen from "../../screen/distributor/SettingScreen";
-import RetailerSettingScreen from "../../screen/distributor/SettingScreen";
-
 import ScanScreen from "../../screen/distributor/ScanScreen";
+import RetailerHomeScreen from "../../screen/retailer/HomeScreen";
+import DistributorHomeScreen from "../../screen/distributor/HomeScreen";
+import RetailerSettingScreen from "../../screen/retailer/SettingScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import DistributorSettingScreen from "../../screen/distributor/SettingScreen";
 
 import styles from "./style";
-import { View, Platform } from "react-native";
-import { Image } from "react-native";
-import { Text } from "react-native";
-import { TouchableOpacity } from "react-native";
 import { color } from "../../utils";
+import { Text } from "react-native";
+import { Image } from "react-native";
+import { View, Platform } from "react-native";
+import { TouchableOpacity } from "react-native";
 const Tab = createBottomTabNavigator();
 
 const CustomTabBarButton = ({
@@ -269,7 +268,7 @@ export function TabsRetailer() {
                   fontFamily: "RobotoSlab-VariableFont_wght",
                 }}
               >
-                Profile
+                Management
               </Text>
             </View>
           ),

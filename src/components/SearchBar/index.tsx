@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
-import { Feather, Entypo } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
 import { Text } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Feather, Entypo } from "@expo/vector-icons";
+import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
 
 interface SearchBarProps {
   clicked: boolean;

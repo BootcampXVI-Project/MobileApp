@@ -1,6 +1,3 @@
-// Expo SDK41
-// expo-blur: ~9.0.3
-import React, { useEffect, useRef } from "react";
 import {
   Animated,
   ImageBackground,
@@ -12,20 +9,18 @@ import {
   Platform,
   RefreshControl,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-// import { BlurView } from "expo-blur";
-import { BlurView } from "@react-native-community/blur";
-
+import { color } from "../../utils";
+import { useSelector } from "react-redux";
 import { Avatar } from "react-native-paper";
 import ItemOrderView from "../ItemOrderView";
-import { color } from "../../utils";
+import { Feather } from "@expo/vector-icons";
+import React, { useEffect, useRef } from "react";
 import { titleCase } from "../../helper/titleCase";
-import { useSelector } from "react-redux";
-// import SearchBar from "../Search/SearchBar";
+import { BlurView } from "@react-native-community/blur";
 
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
