@@ -1,15 +1,15 @@
 import Space from "../Space";
 import React, { useState } from "react";
-import { Product } from "../../types/models";
+import { ManufacturedProduct, Product } from "../../types/models";
 import { color, windowWidth } from "../../utils";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { formatNumberWithCommas } from "../../helper/money";
-import { convertTimeString } from "../../helper/formatDate";
+import { convertTimeString, convertToUTC } from "../../helper/formatDate";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 type Props = {
-  product: Product;
+  product: ManufacturedProduct;
 };
 
 const NewProduct: React.FC<Props> = ({ product }) => {
@@ -18,11 +18,20 @@ const NewProduct: React.FC<Props> = ({ product }) => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate("ProductScreen", product)}
+      onPress={() =>
+        navigation.navigate("ProductScreen", product?.product.productId)
+      }
     >
       <Image
+        source={{
+          uri: "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fnew.png?alt=media&token=72880922-c6bf-4f1b-bf1c-ff94a95936cb&_gl=1*fgpw0z*_ga*MjQ1MDY3NTA3LjE2ODQ5MTY0MzI.*_ga_CW55HF8NVT*MTY4NjIxMTM3NS4yMC4xLjE2ODYyMTE0MDIuMC4wLjA.",
+        }}
+        style={styles.labelNew}
+        resizeMode="cover"
+      />
+      <Image
         style={styles.image}
-        source={{ uri: product.image[0] }}
+        source={{ uri: product?.product?.image[0] }}
         resizeMode="cover"
       />
       <View style={{ flex: 1, justifyContent: "space-between" }}>
@@ -34,7 +43,7 @@ const NewProduct: React.FC<Props> = ({ product }) => {
           }}
           numberOfLines={1}
         >
-          {product.productName}
+          {product?.product?.productName}
         </Text>
 
         <Text
@@ -45,18 +54,18 @@ const NewProduct: React.FC<Props> = ({ product }) => {
             color: color.Primary,
           }}
         >
-          {convertTimeString(product.dates[0].time).date}
+          {convertTimeString(convertToUTC(product?.manufacturedDate)).date}
         </Text>
         <Text
           style={{
             fontFamily: "RobotoSlab-SemiBold",
             // marginBottom: 28,
             fontSize: 14,
-            color: color.Secondary,
+            color: color.Primary,
           }}
           numberOfLines={1}
         >
-          {product.supplier.fullName}
+          {product?.product?.supplier.fullName}
         </Text>
       </View>
       <Text
@@ -66,7 +75,7 @@ const NewProduct: React.FC<Props> = ({ product }) => {
           fontSize: 16,
         }}
       >
-        {formatNumberWithCommas(product.price)} VND
+        {formatNumberWithCommas(product?.product?.price)} VND
       </Text>
     </TouchableOpacity>
   );
@@ -90,6 +99,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 6,
+  },
+  labelNew: {
+    width: 36,
+    height: 36,
+    position: "absolute",
+    zIndex: 3,
+    top: -6,
+    right: -6,
   },
   image: {
     width: 90,

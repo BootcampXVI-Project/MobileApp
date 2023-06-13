@@ -2,8 +2,8 @@ import { Dimensions } from "react-native";
 export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;
 
-export const GOOGLE_MAPS_APIKEY = "AIzaSyDhW90W_VU5O-fhuFGiwD56_nGMfBK0_W4";
-export const API_URL = "https://878b9e33e010.ngrok.app";
+export const GOOGLE_MAPS_APIKEY = "AIzaSyCncu1y32EgJiv1FIuP85z0QwM-K00ecgQ";
+export const API_URL = "https://0ddeed6f66b9.ngrok.app";
 export const shadow = {
   shadowColor: "#000",
   shadowOffset: {
@@ -20,7 +20,7 @@ export const getDelta = (
 ) => {
   const latitudes = coordinates.map((coord) => coord.latitude);
   const longitudes = coordinates.map((coord) => coord.longitude);
-
+  //
   const maxLatitude = Math.max(...latitudes);
   const minLatitude = Math.min(...latitudes);
   const maxLongitude = Math.max(...longitudes);

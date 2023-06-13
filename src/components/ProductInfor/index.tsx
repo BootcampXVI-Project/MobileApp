@@ -19,7 +19,6 @@ type Props = {
 };
 
 const ProductInfor: React.FC<Props> = ({ data }) => {
-  //   console.log(data);
   const [isImageViewVisible, setIsImageViewVisible] = useState<boolean>(false);
   const [isCertificateViewVisible, setIsCertificateViewVisible] =
     useState<boolean>(false);
@@ -64,7 +63,7 @@ const ProductInfor: React.FC<Props> = ({ data }) => {
           }}
         >
           <Image
-            source={{ uri: data.qrCode }}
+            source={{ uri: data?.qrCode }}
             style={{ width: 60, height: 60 }}
           />
         </TouchableOpacity>
@@ -116,7 +115,7 @@ const ProductInfor: React.FC<Props> = ({ data }) => {
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
           <ImageViewer
-            imageUrls={[{ url: data.qrCode }]}
+            imageUrls={[{ url: data?.qrCode }]}
             style={{ top: -18 }}
             backgroundColor={"#fff"}
           />
@@ -181,4 +180,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductInfor;
+export default React.memo(ProductInfor);

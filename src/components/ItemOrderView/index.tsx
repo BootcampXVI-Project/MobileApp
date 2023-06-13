@@ -4,28 +4,35 @@ import { color } from "../../utils";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View, Image } from "react-native";
+import { Order } from "../../types/models";
+import { Item } from "react-native-paper/lib/typescript/src/components/Drawer/Drawer";
+import { calculateTotalAmount } from "../../helper/calculateMoneyCart";
+import { formatNumberWithCommas } from "../../helper/money";
 
 type Props = {
   isShowStatus?: boolean;
   selectList?: number;
+  item?: Order;
 };
 
 const ItemOrderView: React.FC<Props> = ({
   isShowStatus = false,
   selectList = 0,
+  item,
 }) => {
   const navigation = useNavigation();
+  // console.log(item);
 
   return (
     <TouchableOpacity
       style={[styles.container, styles.shadow]}
       onPress={() => {
-        navigation.navigate("DetailProductScreen");
+        navigation.navigate("DetailProductScreen", item?.orderId);
       }}
     >
       <Image
         source={{
-          uri: "https://www.investopedia.com/thmb/hJrIBjjMBGfx0oa_bHAgZ9AWyn0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/qr-code-bc94057f452f4806af70fd34540f72ad.png",
+          uri: item?.qrCode,
         }}
         style={styles.logo}
       />
@@ -36,11 +43,15 @@ const ItemOrderView: React.FC<Props> = ({
             fontFamily: "RobotoSlab-Bold",
             fontSize: 18,
           }}
+          numberOfLines={1}
         >
-          OrderID
+          {item?.updateDate}
         </Text>
-        <Text style={{ fontFamily: "RobotoSlab-SemiBold", fontSize: 16 }}>
-          Name Retailer
+        <Text
+          style={{ fontFamily: "RobotoSlab-SemiBold", fontSize: 16 }}
+          numberOfLines={1}
+        >
+          {item?.retailer?.fullName}
         </Text>
         {isShowStatus ? (
           <View>
@@ -52,22 +63,27 @@ const ItemOrderView: React.FC<Props> = ({
               }
               color={selectList == 0 ? color.Primary : color.Secondary}
               fontSize={16}
-              text="Finish"
+              text={item?.status || ""}
             />
           </View>
         ) : (
-          <Text>2 items</Text>
+          <Text>{item?.productItemList?.length} item</Text>
         )}
       </View>
-      <View style={[styles.price, { paddingHorizontal: 14 }]}>
+      <View style={[styles.price, { paddingHorizontal: 4, width: 110 }]}>
         <Text
           style={{
             color: selectList == 0 ? color.Primary : color.Secondary,
             fontFamily: "RobotoSlab-Bold",
             fontSize: 16,
+            textAlign: "left",
           }}
+          numberOfLines={1}
         >
-          120.0$
+          {formatNumberWithCommas(
+            calculateTotalAmount(item?.productItemList || [])
+          )}{" "}
+          VND
         </Text>
       </View>
     </TouchableOpacity>

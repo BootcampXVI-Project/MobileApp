@@ -1,7 +1,7 @@
 import { color } from "../../utils";
 import React, { useState } from "react";
 import Timeline from "react-native-timeline-flatlist";
-import { convertTimeString } from "../../helper/formatDate";
+import { convertTimeString, convertToUTC } from "../../helper/formatDate";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 type Props = {
@@ -84,10 +84,10 @@ const TimeLineStatus: React.FC<Props> = ({ data, setIsImageViewVisible }) => {
               }}
             >
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
-                {convertTimeString(rowData.deliveryDate).date}
+                {convertTimeString(convertToUTC(rowData.deliveryDate)).date}
               </Text>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
-                {convertTimeString(rowData.deliveryDate).time}
+                {convertTimeString(convertToUTC(rowData.deliveryDate)).time}
               </Text>
             </View>
           );

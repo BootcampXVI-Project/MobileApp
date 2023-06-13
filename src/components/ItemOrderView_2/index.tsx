@@ -4,9 +4,10 @@ import { color } from "../../utils";
 import React, { useState } from "react";
 import { Order } from "../../types/models";
 import { useNavigation } from "@react-navigation/native";
-import { convertTimeString } from "../../helper/formatDate";
+import { convertTimeString, convertToUTC } from "../../helper/formatDate";
 import { formatNumberWithCommas } from "../../helper/money";
 import { Text, TouchableOpacity, View, Image } from "react-native";
+import { calculateTotalAmount } from "../../helper/calculateMoneyCart";
 
 type Props = {
   isShowStatus?: boolean;
@@ -34,7 +35,7 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
     <TouchableOpacity
       style={[styles.container, styles.shadow]}
       onPress={() => {
-        navigation.navigate("OrderDetailScreen", item);
+        navigation.navigate("OrderDetailScreen", item.orderId);
       }}
     >
       <View style={[{ flexDirection: "row" }]}>
@@ -60,14 +61,16 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
               fontSize: 18,
             }}
           >
-            {`${convertTimeString(item.createDate).date}, ${
-              convertTimeString(item.createDate).time
+            {`${convertTimeString(convertToUTC(item.createDate)).date}, ${
+              convertTimeString(convertToUTC(item.createDate)).time
             }`}
           </Text>
           <Text
             style={{ fontFamily: "RobotoSlab-VariableFont_wght", fontSize: 14 }}
           >
-            Have {item.productItemList.length} product
+            {item.productItemList.length > 1
+              ? `${item.productItemList.length} products`
+              : `${item.productItemList.length} product`}
           </Text>
           {isShowStatus ? (
             <View>
@@ -95,7 +98,11 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
               />
             </View>
           ) : (
-            <Text>2 items</Text>
+            <Text>
+              {item.productItemList.length > 1
+                ? `${item.productItemList.length} items`
+                : `${item.productItemList.length} item`}
+            </Text>
           )}
         </View>
       </View>
@@ -114,7 +121,8 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
             fontSize: 16,
           }}
         >
-          {formatNumberWithCommas("120000")} VND
+          {formatNumberWithCommas(calculateTotalAmount(item.productItemList))}{" "}
+          VND
         </Text>
       </View>
     </TouchableOpacity>

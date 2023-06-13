@@ -12,12 +12,12 @@ import { formatCurrency } from "../../helper/money";
 import { useNavigation } from "@react-navigation/native";
 
 type Props = {
-  totalPrice: number;
-  orderStatus: string;
+  totalPrice?: number;
+  orderStatus?: string;
 };
 
 const BottomSideOrderDetail: React.FC<Props> = ({
-  totalPrice,
+  totalPrice = 10,
   orderStatus,
 }) => {
   const navigation = useNavigation();
@@ -26,7 +26,7 @@ const BottomSideOrderDetail: React.FC<Props> = ({
 
   return (
     <>
-      {orderStatus.toLowerCase() === "pending" ? (
+      {orderStatus?.toLowerCase() === "pending" ? (
         <View style={[styles.container, styles.shadow]}>
           <TouchableOpacity style={styles.cancelButton}>
             <Text

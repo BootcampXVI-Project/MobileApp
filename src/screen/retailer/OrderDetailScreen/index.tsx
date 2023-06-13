@@ -12,22 +12,33 @@ import { FlatList } from "react-native";
 import { Order } from "../../../types/models";
 import { AntDesign } from "@expo/vector-icons";
 import { color, windowWidth } from "../../../utils";
-import React, { useLayoutEffect, useState } from "react";
 import ProductItem from "../../../components/ProductItem";
 import ImageViewer from "react-native-image-zoom-viewer-fixed";
 import TimeLineStatus from "../../../components/TimeLineStatus";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useLayoutEffect, useState, useMemo } from "react";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import StautsOrderComponent from "../../../components/StatusOrderComponent";
 import BottomSideOrderDetail from "../../../components/BottomSideOrderDetail";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrderById } from "../../../api/order";
+import { loadDone, loadStart } from "../../../redux/features/load";
+import { calculateTotalAmount } from "../../../helper/calculateMoneyCart";
 
 type Props = {};
 
 const OrderDetailScreen = (props: Props) => {
   const navigation = useNavigation();
   const route = useRoute();
-  // console.log(route.params);
-  const ORDER: Order = route.params as Order;
+  const user = useSelector((state: any) => state?.auth?.user);
+  const dispatch = useDispatch();
+
+  const orderId: string = typeof route.params === "string" ? route.params : "";
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Order",
@@ -59,15 +70,31 @@ const OrderDetailScreen = (props: Props) => {
       ),
     });
   }, []);
+  const [order, setOrder] = useState<Order | undefined>();
 
+  const callApi = async () => {
+    dispatch(loadStart());
+    const order = await getOrderById(orderId, user.token, dispatch);
+    setOrder(order);
+    dispatch(loadDone());
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      callApi();
+      return () => {};
+    }, [])
+  );
   const [isImageViewVisible, setIsImageViewVisible] = useState<boolean>(false);
-  // console.log(isImageViewVisible);
-  // console.log([ORDER?.signature]);
-  const images = Object.entries(ORDER?.signature).map(([title, url]) => ({
-    title,
-    url,
-  }));
 
+  const signatureObject = {
+    distributorSignature: order?.signature?.[0],
+    retailerSignature: order?.signature?.[1],
+  };
+  const images = Object.entries(signatureObject).map(([title, url]) => ({
+    title,
+    url: url || "",
+  }));
   return (
     <>
       <FlatList
@@ -101,15 +128,15 @@ const OrderDetailScreen = (props: Props) => {
                   fontFamily: "RobotoSlab-Medium",
                 }}
               >
-                {ORDER?.orderId}
+                {order?.orderId}
               </Text>
             </Text>
-            <StautsOrderComponent status={ORDER?.status} />
+            <StautsOrderComponent status={order?.status} />
             <Text style={{ fontFamily: "RobotoSlab-Medium", marginTop: 4 }}>
               List product
             </Text>
             <FlatList
-              data={ORDER?.productItemList}
+              data={order?.productItemList}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => <ProductItem item={item} />}
@@ -120,7 +147,7 @@ const OrderDetailScreen = (props: Props) => {
               Status order
             </Text>
             <TimeLineStatus
-              data={ORDER?.deliveryStatuses}
+              data={order?.deliveryStatuses}
               setIsImageViewVisible={setIsImageViewVisible}
             />
           </View>
@@ -149,7 +176,7 @@ const OrderDetailScreen = (props: Props) => {
             imageUrls={images}
             style={{ top: -18 }}
             backgroundColor={"#fff"}
-            renderHeader={(currentIndex: number) => (
+            renderHeader={(currentIndex: number | undefined) => (
               <View
                 style={{
                   alignItems: "center",
@@ -165,7 +192,7 @@ const OrderDetailScreen = (props: Props) => {
                     color: "#000",
                   }}
                 >
-                  {currentIndex + 1}/{images.length}
+                  {currentIndex || 0 + 1}/{images.length}
                 </Text>
                 <Text
                   style={{
@@ -174,7 +201,7 @@ const OrderDetailScreen = (props: Props) => {
                     color: "#000",
                   }}
                 >
-                  {images[currentIndex].title == "distributorSignature"
+                  {images[currentIndex || 0].title == "distributorSignature"
                     ? "Distributor"
                     : "Retailer"}
                 </Text>
@@ -183,7 +210,10 @@ const OrderDetailScreen = (props: Props) => {
           />
         </View>
       </Modal>
-      <BottomSideOrderDetail totalPrice={111111} orderStatus={ORDER?.status} />
+      <BottomSideOrderDetail
+        totalPrice={Number(calculateTotalAmount(order?.productItemList || []))}
+        orderStatus={order?.status}
+      />
     </>
   );
 };

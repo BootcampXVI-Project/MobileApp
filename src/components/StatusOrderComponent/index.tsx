@@ -2,7 +2,7 @@ import React from "react";
 import { color } from "../../utils";
 import { View, Text, StyleSheet } from "react-native";
 type Props = {
-  status: string;
+  status?: string;
 };
 
 const StautsOrderComponent: React.FC<Props> = ({ status }) => {

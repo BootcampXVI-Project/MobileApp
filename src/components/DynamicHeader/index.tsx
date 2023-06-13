@@ -14,13 +14,17 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { color } from "../../utils";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "react-native-paper";
 import ItemOrderView from "../ItemOrderView";
 import { Feather } from "@expo/vector-icons";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { titleCase } from "../../helper/titleCase";
 import { BlurView } from "@react-native-community/blur";
+import { Order } from "../../types/models";
+import { getOrdersOfDistributorByStatus } from "../../api/order";
+import { useFocusEffect } from "@react-navigation/native";
+import SearchBar from "../SearchBar";
 
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -85,7 +89,37 @@ function App({
   //     wait(2000).then(() => setRefreshing(false));
   //   }, []);
   const user = useSelector((state: any) => state?.auth?.user?.user);
+  const token = useSelector((state: any) => state?.auth?.user?.token);
 
+  const dispatch = useDispatch();
+  const [ordersShipped, setOrdersShipped] = useState<Order[]>([]);
+  const [ordersApproved, setOrdersApproved] = useState<Order[]>([]);
+
+  const callApi = async () => {
+    // dispatch(loadStart());
+    const shipped = await getOrdersOfDistributorByStatus(
+      "SHIPPED",
+      token,
+      dispatch
+    );
+    setOrdersShipped(shipped);
+    const approved = await getOrdersOfDistributorByStatus(
+      "APPROVED",
+      token,
+      dispatch
+    );
+    setOrdersApproved(approved);
+    // dispatch(loadDone());
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      callApi();
+      return () => {};
+    }, [])
+  );
+  const [searchPhrase, setSearchPhrase] = useState<string>("");
+  const [clicked, setClicked] = useState<boolean>(false);
   return (
     <View style={styles.container}>
       <Animated.View
@@ -141,7 +175,7 @@ function App({
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-around",
-            marginTop: Platform.OS === "ios" ? 72 : 20,
+            marginTop: Platform.OS === "ios" ? 60 : 12,
             // borderWidth: 1,
             opacity: scrollY.interpolate({
               inputRange: [-200, 0, 200],
@@ -149,14 +183,17 @@ function App({
               extrapolateLeft: "extend",
               extrapolateRight: "clamp",
             }),
+            paddingHorizontal: 32,
           }}
         >
           <View style={styles.boxName}>
             <Text style={styles.helloText}>Hello,</Text>
-            <Text style={styles.nameText}>{titleCase(username)}</Text>
+            <Text style={styles.nameText} numberOfLines={1}>
+              {titleCase(username)}
+            </Text>
           </View>
           <Avatar.Image
-            size={60}
+            size={80}
             source={{
               uri: user.avatar,
             }}
@@ -164,60 +201,43 @@ function App({
           />
         </Animated.View>
       </AnimatedImageBackground>
-
+      <SearchBar
+        searchPhrase={searchPhrase}
+        setSearchPhrase={setSearchPhrase}
+        clicked={clicked}
+        setClicked={setClicked}
+      />
       <Animated.FlatList
-        data={DATA}
+        data={selectList == 1 ? ordersApproved : ordersShipped}
         style={{
           zIndex: 2,
           paddingHorizontal: 16,
         }}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: { y: scrollY },
-              },
-            },
-          ],
-          { useNativeDriver: true }
-        )}
+        // onScroll={Animated.event(
+        //   [
+        //     {
+        //       nativeEvent: {
+        //         contentOffset: { y: scrollY },
+        //       },
+        //     },
+        //   ],
+        //   { useNativeDriver: true }
+        // )}
         // refreshControl={
         //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         // }
         renderItem={({ item }) => (
-          <ItemOrderView isShowStatus={true} selectList={selectList} />
+          <ItemOrderView
+            isShowStatus={true}
+            selectList={selectList}
+            item={item}
+          />
         )}
       />
       {children}
     </View>
   );
 }
-const DATA: any[] = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bq96-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-a96-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bdq6-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bdg6-145571e29d72",
-  },
-  {
-    id: "58694a0f-3da1-471f-bda6-145571e29d72",
-  },
-];
 
 const styles = StyleSheet.create({
   container: {
@@ -248,7 +268,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   boxName: {
-    marginRight: 120,
+    marginRight: 80,
   },
   helloText: {
     fontSize: 26,

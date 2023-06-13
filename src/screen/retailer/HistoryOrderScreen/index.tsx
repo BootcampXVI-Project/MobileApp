@@ -17,22 +17,36 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import ItemOrderView_2 from "../../../components/ItemOrderView_2";
 import { color, windowHeight, windowWidth } from "../../../utils";
-import React, { useLayoutEffect, useState, useEffect } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import HeaderRetailerHomeScreen from "../../../components/HeaderRetailerHomeScreen";
+import React, { useLayoutEffect, useState, useEffect, useMemo } from "react";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import AnimatedLottieView from "lottie-react-native";
 
-type Props = {};
+type Props = {
+  status: string;
+};
 
 const HistoryOrderScreen = (props: Props) => {
   const user = useSelector((state: any) => state?.auth?.user);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [order, setOrder] = useState();
+  const route = useRoute();
+  const status: string = useMemo(() => {
+    if (route?.params && "status" in route.params) {
+      return route.params.status as string;
+    }
+    return "";
+  }, [route.params]);
+
+  const [order, setOrder] = useState([]);
 
   const getAllOrdersofRetailer = async () => {
-    const result = await getAllOrders(user.token, dispatch);
-    // setOrder(result);
+    const result = await getAllOrders(user.token, dispatch, status);
+    setOrder(result);
   };
 
   useLayoutEffect(() => {
@@ -89,16 +103,45 @@ const HistoryOrderScreen = (props: Props) => {
         clicked={clicked}
         setClicked={setClicked}
       />
-      <FlatList
-        data={DATA.data}
-        style={{
-          zIndex: 2,
-          paddingHorizontal: 12,
-        }}
-        renderItem={({ item }: { item: Order }) => (
-          <ItemOrderView_2 isShowStatus={true} item={item} />
-        )}
-      />
+      {order?.length !== 0 ? (
+        <FlatList
+          data={order}
+          style={{
+            zIndex: 2,
+            paddingHorizontal: 12,
+          }}
+          renderItem={({ item }: { item: Order }) => (
+            <ItemOrderView_2 isShowStatus={true} item={item} />
+          )}
+        />
+      ) : (
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            top: -60,
+            flex: 1,
+          }}
+        >
+          <Text
+            style={{
+              top: 100,
+              fontFamily: "RobotoSlab-Bold",
+              fontSize: 32,
+              color: color.Primary,
+            }}
+          >
+            Let's create your order
+          </Text>
+          <AnimatedLottieView
+            source={require("../../../../assets/question/empty-box.json")}
+            autoPlay
+            // loop
+            // style={styles.load}
+            style={{ width: "100%" }}
+          />
+        </View>
+      )}
     </View>
   );
 };

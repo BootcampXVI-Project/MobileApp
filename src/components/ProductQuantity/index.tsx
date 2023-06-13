@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Quantity from "../QuantityProduct";
-import { windowHeight, windowWidth } from "../../utils";
+import { color, windowHeight, windowWidth } from "../../utils";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { getProductById } from "../../api/product";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { Product, ProductIdItem } from "../../types/models";
+import { formatNumberWithCommas } from "../../helper/money";
+import { Feather } from "@expo/vector-icons";
+import { deleteProductInCart } from "../../api/cart";
+import ReactNativeModal from "react-native-modal";
+import ConfirmModal from "../ModalConfirm";
 
 type Props = {
   item: {
-    product: any;
+    productId: string;
     quantity: string;
   };
+  setListProductOrder: any;
+  setCart: any;
 };
 const rightSwipeActions = () => {
   return (
     <View
       style={{
-        backgroundColor: "#ff8303",
         justifyContent: "center",
-        alignItems: "flex-end",
-        marginVertical: 4,
+        alignItems: "center",
+        marginVertical: 8,
+        paddingHorizontal: 30,
+        paddingVertical: 20,
       }}
     >
+      <Feather name="delete" size={30} color="red" />
       <Text
         style={{
-          color: "#1b1a17",
-          fontWeight: "600",
-          paddingHorizontal: 30,
-          paddingVertical: 20,
+          fontFamily: "RobotoSlab-Bold",
+          color: "red",
+          fontSize: 16,
         }}
       >
         Delete
@@ -33,62 +45,174 @@ const rightSwipeActions = () => {
     </View>
   );
 };
-const swipeFromRightOpen = () => {
-  alert("Swipe from right");
+const swipeFromRightOpen = async (setViewQuestion: any) => {
+  setViewQuestion(true);
 };
-const ProductQuantity: React.FC<Props> = ({ item }) => (
-  <Swipeable
-    renderRightActions={rightSwipeActions}
-    onSwipeableRightOpen={swipeFromRightOpen}
-  >
-    <View style={[styles.container, styles.shadow]}>
-      <Image
-        style={styles.image}
-        source={{
-          uri: item?.product.image[0],
-        }}
-        resizeMode="cover"
-      />
-      <View
-        style={{
-          flex: 1,
-          marginHorizontal: 12,
-          //   borderWidth: 1,
-          justifyContent: "space-evenly",
+
+const ProductQuantity: React.FC<Props> = ({
+  item,
+  setListProductOrder,
+  setCart,
+}) => {
+  const [product, setProduct] = useState<Product>();
+  const [quantity, setQuantity] = useState(Number(item.quantity));
+  const [viewQuestion, setViewQuestion] = useState(false);
+
+  const navigation = useNavigation();
+  const user = useSelector((state: any) => state?.auth?.user);
+  const dispatch = useDispatch();
+
+  const callApi = async () => {
+    // dispatch(loadStart());
+    const product = await getProductById(item.productId, user.token, dispatch);
+    setProduct(product);
+    setListProductOrder((previous: any) => {
+      return [...previous, { product: product, quantity: quantity }];
+    });
+  };
+  const funCancel = () => {
+    setViewQuestion(false);
+  };
+  const funSuccess = async (
+    token: string,
+    dispatch: any,
+    product: ProductIdItem,
+    setListProductOrder: any,
+    setCart: any
+  ) => {
+    const deleteProduct = await deleteProductInCart(token, dispatch, product);
+    setCart(deleteProduct);
+    setListProductOrder((previous: any) => {
+      const even = (element: any) =>
+        element?.product?.productId == product.productId;
+      if (previous?.some(even)) {
+        const new_prev = previous?.filter(
+          (element: any) => element?.product?.productId != product?.productId
+        );
+        return [...new_prev];
+      }
+    });
+    setViewQuestion(false);
+  };
+
+  useEffect(() => {
+    product
+      ? setListProductOrder((previous: any) => {
+          const even = (element: any) =>
+            element?.product?.productId == item.productId;
+          if (previous?.some(even)) {
+            const new_prev = previous?.filter(
+              (element: any) => element?.product?.productId != item?.productId
+            );
+            return [...new_prev, { product: product, quantity: quantity }];
+          }
+        })
+      : null;
+  }, [quantity]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      callApi();
+      return () => {};
+    }, [])
+  );
+  return (
+    <>
+      <Swipeable
+        renderRightActions={rightSwipeActions}
+        onSwipeableRightOpen={() => {
+          swipeFromRightOpen(
+            // user.token,
+            // dispatch,
+            // item,
+            // setListProductOrder,
+            // setCart
+            setViewQuestion
+          );
         }}
       >
-        <Text style={styles.productName}>{item.product.productName}</Text>
-        <Text style={styles.price}>{item.product.price}</Text>
-        <Quantity quantity={item.quantity} />
-      </View>
-      {/* <Text style={styles.quantity}>x{item.quantity}</Text> */}
-    </View>
-  </Swipeable>
-);
+        <View style={[styles.container, styles.shadow]}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: product?.image[0],
+            }}
+            resizeMode="cover"
+          />
+          <View
+            style={{
+              flex: 1,
+              marginHorizontal: 14,
+              // borderWidth: 1,
+              // height: 80,
+              justifyContent: "space-between",
+              marginBottom: 18,
+            }}
+          >
+            <Text style={styles.productName} numberOfLines={1}>
+              {product?.productName}
+            </Text>
+            <Quantity
+              quantity={quantity}
+              setQuantity={setQuantity}
+              // increaseQuantity={increaseQuantity}
+              colorText={color.Primary}
+              amount={product?.amount}
+            />
+          </View>
+          <Text style={styles.price}>
+            {formatNumberWithCommas(product?.price || "")}
+          </Text>
+        </View>
+      </Swipeable>
+      <ReactNativeModal
+        isVisible={viewQuestion}
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <ConfirmModal
+          funCancel={funCancel}
+          funSuccess={() => {
+            funSuccess(
+              user.token,
+              dispatch,
+              item,
+              setListProductOrder,
+              setCart
+            );
+          }}
+          title="You want to delete this?"
+        />
+      </ReactNativeModal>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   image: {
-    height: windowHeight * 0.08,
-    width: windowWidth * 0.2,
+    height: windowHeight * 0.1,
+    width: windowWidth * 0.26,
     borderRadius: 12,
   },
   container: {
     backgroundColor: "#fff",
-    marginVertical: 4,
+    marginVertical: 8,
+    marginHorizontal: 14,
     flexDirection: "row",
     borderRadius: 12,
-    // flex: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    // borderWidth: 1,
+    alignItems: "center",
   },
   productName: {
-    fontFamily: "RobotoSlab-Medium",
+    marginBottom: 18,
+    fontFamily: "RobotoSlab-SemiBold",
+    color: color.Primary,
     fontSize: 16,
   },
   price: {
-    fontFamily: "RobotoSlab-VariableFont_wght",
-    fontSize: 14,
+    fontFamily: "RobotoSlab-Bold",
+    color: color.Primary,
+    fontSize: 16,
   },
   description: {
     fontFamily: "RobotoSlab-VariableFont_wght",

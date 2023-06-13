@@ -2,17 +2,17 @@ import { color } from "../../utils";
 import React, { useState } from "react";
 import { ProductDate } from "../../types/models";
 import Timeline from "react-native-timeline-flatlist";
-import { convertTimeString } from "../../helper/formatDate";
+import { convertTimeString, convertToUTC } from "../../helper/formatDate";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 type Props = {
-  data: ProductDate[];
+  data?: ProductDate[];
 };
-
-const TimeLineProduct: React.FC<Props> = ({ data }) => {
-  const filteredDates = data.filter(
+const TimeLineProduct = React.memo(function TimeLineProduct({ data }: Props) {
+  const filteredDates = data?.filter(
     (date: any) => date?.status !== "sold" && date?.status !== "selling"
   );
+  // console.log("1");
 
   // console.log(data);
   return (
@@ -73,10 +73,10 @@ const TimeLineProduct: React.FC<Props> = ({ data }) => {
               }}
             >
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
-                {convertTimeString(rowData.time).date}
+                {convertTimeString(convertToUTC(rowData.time)).date}
               </Text>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
-                {convertTimeString(rowData.time).time}
+                {convertTimeString(convertToUTC(rowData.time)).time}
               </Text>
             </View>
           );
@@ -84,7 +84,7 @@ const TimeLineProduct: React.FC<Props> = ({ data }) => {
       />
     </View>
   );
-};
+});
 const styles = StyleSheet.create({
   container: {
     borderRadius: 12,
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TimeLineProduct;
+export default React.memo(TimeLineProduct);

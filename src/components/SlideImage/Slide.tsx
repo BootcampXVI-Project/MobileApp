@@ -8,8 +8,6 @@ import { windowWidth } from "../../utils";
 import { StyleSheet, Text, View } from "react-native";
 
 const Slide = ({ item }: { item: any }) => {
-  // console.log(item);
-
   const isCarousel = React.useRef(null);
   const [index, setIndex] = React.useState(0);
   if (item) {
@@ -20,7 +18,7 @@ const Slide = ({ item }: { item: any }) => {
           sliderWidth={windowWidth}
           // sliderHeight={windowWidth}
           itemWidth={windowWidth - 60}
-          data={item.image}
+          data={item}
           renderItem={(
             { item, index }: { item: any; index: any },
             parallaxProps: any
@@ -38,7 +36,7 @@ const Slide = ({ item }: { item: any }) => {
           onBeforeSnapToItem={(index: any) => setIndex(index)}
         />
         <Pagination
-          dotsLength={item?.image?.length}
+          dotsLength={item?.length}
           activeDotIndex={index}
           carouselRef={isCarousel}
           dotStyle={{

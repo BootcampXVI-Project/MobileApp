@@ -7,32 +7,101 @@ import {
   Platform,
   Modal,
 } from "react-native";
-import { Product } from "../../../types/models";
+import { Product, ProductIdItem } from "../../../types/models";
 import { FontAwesome } from "@expo/vector-icons";
 import { color, windowWidth } from "../../../utils";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useMemo } from "react";
 import Slide from "../../../components/SlideImage/Slide";
 import Quantity from "../../../components/QuantityProduct";
 import ProductInfor from "../../../components/ProductInfor";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import TimeLineProduct from "../../../components/TimeLineProduct";
-import { useNavigation, useRoute } from "@react-navigation/native";
+
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { previousDay } from "date-fns";
+import TimeLineProduct from "../../../components/TimeLineProduct";
+import { getProductById } from "../../../api/product";
+import { useDispatch, useSelector } from "react-redux";
+import { loadDone, loadStart } from "../../../redux/features/load";
+import { addProductToCart, getLenghtCart } from "../../../api/cart";
 
 type Props = {};
+
+const ProductInformation = React.memo(function ProductInformation({
+  item,
+}: {
+  item?: Product;
+}) {
+  return (
+    <FlatList
+      style={{ flex: 1, backgroundColor: "#fff" }}
+      data={[]}
+      keyExtractor={(_, index) => `dom${index}`}
+      ListEmptyComponent={null}
+      renderItem={null}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={() => {
+        return (
+          <View style={{ flex: 1, marginTop: 10 }}>
+            <Slide item={item?.image} />
+            <ProductInfor data={item} />
+            <TimeLineProduct data={item?.dates} />
+          </View>
+        );
+      }}
+    />
+  );
+});
 
 const ProductScreen = (props: Props) => {
   const route = useRoute();
   const navigation = useNavigation();
+  const [quantity, setQuantity] = useState(1);
+  const [lenghtCart, setLenghtCart] = useState(0);
 
-  //   console.log(route.params);
-  const item: Product = route.params as Product;
+  // const item: Product = route.params as Product;
 
-  const addtocart = () => {
+  const item: string = useMemo(() => {
+    return route.params as unknown as string;
+  }, [route.params]);
+
+  const user = useSelector((state: any) => state?.auth?.user);
+  const dispatch = useDispatch();
+  const [product, setProduct] = useState<Product>();
+
+  const callApi = async () => {
+    dispatch(loadStart());
+    const product = await getProductById(item, user.token, dispatch);
+    setProduct(product);
+    dispatch(loadDone());
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      callApi();
+      getLenghtCart(setLenghtCart, user.token, dispatch);
+      return () => {};
+    }, [])
+  );
+  const addtocart = async () => {
     // addCart(data);
+    const addProduct: ProductIdItem = {
+      productId: item,
+      quantity: String(quantity),
+    };
+    const responeAddProduct = await addProductToCart(
+      user.token,
+      dispatch,
+      addProduct
+    );
+
     showMessage({
       message: "Success",
-      description: `${item?.productName} is added to cart.`,
+      description: `${product?.productName} is added to cart.`,
       textStyle: { fontFamily: "RobotoSlab-VariableFont_wght" },
       titleStyle: { fontFamily: "RobotoSlab-Bold" },
       type: "success",
@@ -49,7 +118,7 @@ const ProductScreen = (props: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: item?.productName,
+      title: product?.productName,
       headerTitleAlign: "center",
       headerTitleStyle: {
         color: "#fff",
@@ -92,47 +161,40 @@ const ProductScreen = (props: Props) => {
           }}
         >
           <AntDesign name="shoppingcart" size={24} color="black" />
-          {/* {lenghtCart ? (
-              <View
+          {lenghtCart !== 0 ? (
+            <View
+              style={{
+                backgroundColor: "red",
+                borderRadius: 24,
+                width: 24,
+                height: 24,
+                position: "absolute",
+                top: -8,
+                right: -8,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
                 style={{
-                  backgroundColor: "red",
-                  padding: 6,
-                  borderRadius: 6,
-                  position: "absolute",
-                  top: 4,
-                  right: 0,
+                  fontFamily: "RobotoSlab-Medium",
+                  fontSize: 16,
+                  color: "#fff",
                 }}
-              />
-            ) : null} */}
+              >
+                {lenghtCart}
+              </Text>
+            </View>
+          ) : null}
         </TouchableOpacity>
       ),
     });
-  }, []);
+  }, [item, navigation, lenghtCart]);
+
   return (
     <>
-      <FlatList
-        style={{ flex: 1, backgroundColor: "#fff" }}
-        data={[]}
-        keyExtractor={(_e: any, i: { toString: () => string }) =>
-          "dom" + i.toString()
-        }
-        ListEmptyComponent={null}
-        renderItem={null}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={() => (
-          <View style={{ flex: 1, marginTop: 10 }}>
-            <Slide item={item} />
-            <ProductInfor
-              data={item}
-              //   setIsImageViewVisible={setIsImageViewVisible}
-            />
-            <TimeLineProduct data={item?.dates} />
-          </View>
-        )}
-      />
+      <ProductInformation item={product} />
       <View style={[styles.bottomSide, styles.shadow]}>
-        <Quantity quantity={1} />
-        <View style={{ width: 1, height: "100%", backgroundColor: "#fff" }} />
         <View
           style={{
             // borderWidth: 1,
@@ -156,11 +218,16 @@ const ProductScreen = (props: Props) => {
               fontSize: 16,
             }}
           >
-            {item.unit}
+            {product?.unit}
           </Text>
         </View>
         <View style={{ width: 1, height: "100%", backgroundColor: "#fff" }} />
-
+        <Quantity
+          quantity={quantity}
+          setQuantity={setQuantity}
+          amount={product?.amount}
+        />
+        <View style={{ width: 1, height: "100%", backgroundColor: "#fff" }} />
         <TouchableOpacity style={styles.addCartButton} onPress={addtocart}>
           <Text
             style={{
@@ -176,7 +243,7 @@ const ProductScreen = (props: Props) => {
     </>
   );
 };
-export default ProductScreen;
+export default React.memo(ProductScreen);
 
 const styles = StyleSheet.create({
   bottomSide: {

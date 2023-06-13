@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getGeolocation } from "../../helper/getGeolocation";
 import { color, windowHeight, windowWidth } from "../../utils";
+import AnimatedLottieView from "lottie-react-native";
 
 type Props = {
   user: any;
@@ -55,7 +56,12 @@ const HeaderRetailerHomeScreen: React.FC<Props> = ({ user }) => {
   return (
     <View style={styles.container}>
       {load ? (
-        <Loading />
+        <AnimatedLottieView
+          source={require("../../../assets/load/load.json")}
+          autoPlay
+          loop
+          style={styles.load}
+        />
       ) : (
         <>
           <Text style={styles.text}>{user.fullName}</Text>
@@ -96,5 +102,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "RobotoSlab-VariableFont_wght",
     fontWeight: "600",
+  },
+  load: {
+    width: 40,
+    height: 40,
+    // borderWidth: 1,
+    zIndex: 100,
+    // backgroundColor: "transparent",
   },
 });

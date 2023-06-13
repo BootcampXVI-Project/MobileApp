@@ -6,10 +6,13 @@ import { Marker } from "react-native-maps";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import MapViewDirections from "react-native-maps-directions";
+import { getGeolocation } from "../../helper/getGeolocation";
 import { GOOGLE_MAPS_APIKEY, color, getDelta } from "../../utils";
 import { Text, TouchableOpacity, View, Image, Platform } from "react-native";
 
-type Props = {};
+type Props = {
+  retailerAddress?: string;
+};
 
 const coordinates = [
   {
@@ -21,17 +24,18 @@ const coordinates = [
     longitude: 108.2093204610597,
   },
 ];
-const MapComponent: React.FC<Props> = ({}) => {
+
+type Location = {
+  longitude?: number;
+  latitude?: number;
+};
+
+const MapComponent: React.FC<Props> = ({ retailerAddress }) => {
   const [location, setLocation] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const { latitudeDelta, longitudeDelta } = getDelta(coordinates);
-  //   const [position, setPosition] = useState({
-  //     latitude: 10,
-  //     longitude: 10,
-  //     latitudeDelta: 0.001,
-  //     longitudeDelta: 0.001
-  //   });
+
   const navigation = useNavigation();
   useEffect(() => {
     (async () => {
@@ -46,6 +50,24 @@ const MapComponent: React.FC<Props> = ({}) => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
+  }, []);
+  const [retailerLocation, setRetailerLocation] = useState<Location>({
+    longitude: undefined,
+    latitude: undefined,
+  });
+  useEffect(() => {
+    getGeolocation(retailerAddress || "")
+      .then((result) => {
+        if (result) {
+          setRetailerLocation(result);
+        } else {
+          console.log("Không tìm thấy kết quả.");
+        }
+      })
+      .catch((error) => {
+        console.error("Lỗi:", error);
+      })
+      .finally(() => {});
   }, []);
 
   // console.log(location);

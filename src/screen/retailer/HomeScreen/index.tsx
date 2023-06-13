@@ -8,7 +8,7 @@ import {
   Platform,
   FlatList,
 } from "react-native";
-import { Product } from "../../../types/models";
+import { ManufacturedProduct, Product } from "../../../types/models";
 import SearchBar from "../../../components/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import PRODUCT from "../../../../assets/products.json";
@@ -19,20 +19,17 @@ import { color, windowHeight, windowWidth } from "../../../utils";
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import HeaderRetailerHomeScreen from "../../../components/HeaderRetailerHomeScreen";
+import {
+  getAllProducts,
+  getProductsManufactured,
+  getProductsPopular,
+} from "../../../api/product";
+import { loadDone, loadStart } from "../../../redux/features/load";
+import { getLenghtCart } from "../../../api/cart";
 type Props = {};
 
 const HomeScreen = (props: Props) => {
-  const user = useSelector((state: any) => state?.auth?.user);
-
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  // const [order, setOrder] = useState();
-
-  // const getAllOrdersofRetailer = async () => {
-  //   const result = await getAllOrders(user.token, dispatch);
-  //   // setOrder(result);
-  // };
-
+  const [lenghtCart, setLenghtCart] = useState(0);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -58,14 +55,57 @@ const HomeScreen = (props: Props) => {
             borderRadius: windowWidth * 0.05,
           }}
         >
+          {lenghtCart !== 0 ? (
+            <View
+              style={{
+                backgroundColor: "red",
+                borderRadius: 24,
+                width: 24,
+                height: 24,
+                position: "absolute",
+                top: -8,
+                right: -8,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: "RobotoSlab-Medium",
+                  fontSize: 16,
+                  color: "#fff",
+                }}
+              >
+                {lenghtCart}
+              </Text>
+            </View>
+          ) : null}
           <AntDesign name="shoppingcart" size={24} color="black" />
         </TouchableOpacity>
       ),
     });
-  }, []);
+  }, [lenghtCart]);
+
+  const user = useSelector((state: any) => state?.auth?.user);
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [newProducts, setNewProducts] = useState<ManufacturedProduct[]>([]);
+  const [popular, setPopular] = useState();
+
+  const callApi = async () => {
+    // dispatch(loadStart());
+    const newProducts = await getProductsManufactured(user.token, dispatch);
+    setNewProducts(newProducts);
+    const popular = await getProductsPopular(user.token, dispatch);
+    setPopular(popular);
+    // dispatch(loadDone());
+  };
+
   useFocusEffect(
     React.useCallback(() => {
-      // getAllOrdersofRetailer();
+      callApi();
+      getLenghtCart(setLenghtCart, user.token, dispatch);
       return () => {};
     }, [])
   );
@@ -98,7 +138,7 @@ const HomeScreen = (props: Props) => {
         ListHeaderComponent={() => (
           <>
             <Text style={[styles.title, { marginHorizontal: 16 }]}>
-              Popular Product
+              Product for you
             </Text>
             <FlatList
               horizontal
@@ -125,16 +165,20 @@ const HomeScreen = (props: Props) => {
             <Text style={[styles.title, { marginHorizontal: 16 }]}>
               New Product
             </Text>
-            <FlatList
-              data={PRODUCT?.data}
-              keyExtractor={(item) => item.productId}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }: { item: Product }) => {
-                return <NewProduct product={item} key={item.productId} />;
-              }}
-              style={{ marginHorizontal: 16 }}
-            />
+            {newProducts ? (
+              <FlatList
+                data={newProducts}
+                keyExtractor={(item) => item.product.productId}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }: { item: ManufacturedProduct }) => {
+                  return (
+                    <NewProduct product={item} key={item.product.productId} />
+                  );
+                }}
+                style={{ marginHorizontal: 16 }}
+              />
+            ) : null}
           </>
         )}
       />

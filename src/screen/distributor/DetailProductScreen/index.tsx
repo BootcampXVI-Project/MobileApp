@@ -7,15 +7,23 @@ import {
 } from "react-native";
 import styles from "./style";
 import SwipeButton from "rn-swipe-button";
+import { Order } from "../../../types/models";
+import { useDispatch, useSelector } from "react-redux";
 import React, { useLayoutEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { loadDone, loadStart } from "../../../redux/features/load";
 import MapComponent from "../../../components/MapComponent";
 import ItemOrderView from "../../../components/ItemOrderView";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { color, windowHeight, windowWidth } from "../../../utils";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import CustomCollapsible from "../../../components/CustomCollapsible";
 import SignatureRetailer from "../../../components/SignatureRetailer";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { getOrderById } from "../../../api/order";
 
 const ButtonSwipe = () => {
   return (
@@ -42,6 +50,27 @@ const DetailProductScreen = () => {
   const navigation = useNavigation();
   const [signature, setSignature] = useState<any>(null);
   // console.log(signature);
+  const route = useRoute();
+  const user = useSelector((state: any) => state?.auth?.user);
+  const dispatch = useDispatch();
+
+  const orderId: string = typeof route.params === "string" ? route.params : "";
+
+  const [order, setOrder] = useState<Order | undefined>();
+
+  const callApi = async () => {
+    dispatch(loadStart());
+    const order = await getOrderById(orderId, user.token, dispatch);
+    setOrder(order);
+    dispatch(loadDone());
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      callApi();
+      return () => {};
+    }, [])
+  );
 
   const handleSwipeOrder = () => {};
   useLayoutEffect(() => {
@@ -74,7 +103,7 @@ const DetailProductScreen = () => {
         backgroundColor={color.Primary}
         barStyle={"light-content"}
       />
-      <ItemOrderView />
+      <ItemOrderView item={order} />
       <Text
         style={{
           color: color.Primary,
@@ -87,8 +116,8 @@ const DetailProductScreen = () => {
       >
         List item in this order
       </Text>
-      <CustomCollapsible />
-      <MapComponent />
+      <CustomCollapsible productItemList={order?.productItemList || []} />
+      <MapComponent retailerAddress={order?.retailer.address} />
       <SignatureRetailer signature={signature} setSignature={setSignature} />
       <View style={styles.swipe}>
         <SwipeButton

@@ -12,10 +12,10 @@ export function formatCurrency(value: number): string {
   const formattedValue = (value / Math.pow(10, suffixIndex * 3)).toFixed(2);
   return `${formattedValue}${suffixes[suffixIndex]}`;
 }
-export function formatNumberWithCommas(numberString: string): string {
-  const number = Number(numberString.replace(/[^0-9.-]+/g, "")); // Chuyển đổi chuỗi thành số
+export function formatNumberWithCommas(numberString?: string): string {
+  const number = Number(numberString?.replace(/[^0-9.-]+/g, "")); // Chuyển đổi chuỗi thành số
   if (isNaN(number)) {
-    throw new Error("Invalid number string");
+    return "";
   }
   return number.toLocaleString();
 }

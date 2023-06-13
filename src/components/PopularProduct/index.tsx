@@ -17,8 +17,8 @@ const PopularProduct: React.FC<Props> = ({ product, index }) => {
 
   return (
     <TouchableOpacity
-      style={[styles.container, { marginLeft: index == 0 ? 12 : 0 }]}
-      onPress={() => navigation.navigate("ProductScreen", product)}
+      style={[styles.container, { marginLeft: index == 0 ? 20 : 0 }]}
+      // onPress={() => navigation.navigate("ProductScreen", product.productId)}
     >
       <View style={styles.container_child1}>
         <View style={styles.companyBox}>

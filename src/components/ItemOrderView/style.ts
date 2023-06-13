@@ -12,11 +12,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     marginVertical: 8,
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 8,
     borderRadius: 12,
   },
   content: {
-    marginHorizontal: 24,
+    marginHorizontal: 6,
     flex: 1,
     justifyContent: "space-around",
   },
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   price: {
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "center",
   },
 });

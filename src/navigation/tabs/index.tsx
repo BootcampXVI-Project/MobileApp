@@ -1,4 +1,6 @@
-import ScanScreen from "../../screen/distributor/ScanScreen";
+import DistributorScanScreen from "../../screen/distributor/ScanScreen";
+import RetailerScanScreen from "../../screen/retailer/ScanScreen";
+
 import RetailerHomeScreen from "../../screen/retailer/HomeScreen";
 import DistributorHomeScreen from "../../screen/distributor/HomeScreen";
 import RetailerSettingScreen from "../../screen/retailer/SettingScreen";
@@ -99,7 +101,7 @@ export function TabsDistributor() {
       />
       <Tab.Screen
         name="Scan"
-        component={ScanScreen}
+        component={DistributorScanScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -217,7 +219,7 @@ export function TabsRetailer() {
       />
       <Tab.Screen
         name="Scan"
-        component={ScanScreen}
+        component={RetailerScanScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (

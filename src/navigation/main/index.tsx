@@ -1,3 +1,4 @@
+import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import Loading from "../../components/Load";
 import Login from "../../screen/LoginScreen";
@@ -13,6 +14,8 @@ import OrderDetailScreen from "../../screen/retailer/OrderDetailScreen";
 import HistoryOrderScreen from "../../screen/retailer/HistoryOrderScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import DetailProductScreen from "../../screen/distributor/DetailProductScreen";
+import HistoryProductScreen from "../../screen/retailer/HistoryProductScreen";
+import { color } from "../../utils";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +31,29 @@ export function App() {
         isVisible={load}
         style={{ alignItems: "center", justifyContent: "center" }}
       >
-        <Loading />
+        <View
+          style={{
+            backgroundColor: "#fff",
+            // padding: 120,
+            paddingHorizontal: 120,
+            paddingVertical: 60,
+            borderRadius: 24,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: color.Primary,
+              fontSize: 20,
+              fontFamily: "RobotoSlab-Bold",
+              marginBottom: 60,
+            }}
+          >
+            Please Wait...
+          </Text>
+          <Loading />
+        </View>
       </ReactNativeModal>
       <NavigationContainer>
         <Stack.Navigator>
@@ -89,6 +114,11 @@ export function App() {
             name="HistoryOrderScreen"
             // options={{ headerShown: false }}
             component={HistoryOrderScreen}
+          />
+          <Stack.Screen
+            name="HistoryProductScreen"
+            // options={{ headerShown: false }}
+            component={HistoryProductScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

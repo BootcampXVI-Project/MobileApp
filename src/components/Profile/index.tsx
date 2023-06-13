@@ -9,17 +9,14 @@ import { color } from "../../utils";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Avatar } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { titleCase } from "../../helper/titleCase";
 import { useNavigation } from "@react-navigation/native";
-// import NullAvatar from "../../../assets/nullavatar.png";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { convertPhoneNumberTo0 } from "../../helper/convertPhonenumber";
 
 type Props = {
-  profile: any;
+  profile?: any;
 };
 
 const Profile: React.FC<Props> = ({ profile }) => {
@@ -57,19 +54,9 @@ const Profile: React.FC<Props> = ({ profile }) => {
   };
 
   return (
-    <View
-      style={[styles.container, { paddingTop: HEADER_HEIGHT_NARROWED }]}
-      //   onPress={() => {
-      //     navigation.navigate("Profile", {
-      //       screen: "InformationProfile",
-      //       initial: false,
-      //       params: { profile },
-      //     });
-      //   }}
-    >
+    <View style={[styles.container, { paddingTop: HEADER_HEIGHT_NARROWED }]}>
       <TouchableOpacity onPress={pickImage}>
         <Avatar.Image
-          // style={styles.Image}
           size={160}
           source={{
             uri: !image ? user?.avatar : image,
@@ -78,11 +65,10 @@ const Profile: React.FC<Props> = ({ profile }) => {
         />
       </TouchableOpacity>
       <Text style={styles.name}>
-        {/* {titleCase(user?.userName)} */}
         {convertPhoneNumberTo0(user?.phoneNumber)}
       </Text>
 
-      <Text style={styles.position}>{user?.email}</Text>
+      <Text style={styles.position}>{user?.fullName}</Text>
     </View>
   );
 };
@@ -110,8 +96,8 @@ const styles = StyleSheet.create({
   },
   position: {
     marginVertical: 2,
-    fontFamily: "RobotoSlab-Medium",
-    fontSize: 16,
+    fontFamily: "RobotoSlab-SemiBold",
+    fontSize: 18,
     color: "#fff",
   },
 });

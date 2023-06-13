@@ -14,7 +14,7 @@ const ProductItem: React.FC<Props> = ({ item }) => {
     <TouchableOpacity
       style={[styles.container, styles.shadow]}
       onPress={() => {
-        navigation.navigate("ProductScreen", item.product);
+        navigation.navigate("ProductScreen", item.product.productId);
       }}
     >
       <Image
