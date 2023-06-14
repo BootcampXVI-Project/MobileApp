@@ -4,12 +4,12 @@ import Slide from "../SlideImage/Slide";
 import CardProduct from "../CardProduct";
 import Accordion from "react-native-collapsible/Accordion";
 import { View, Text, TouchableOpacity } from "react-native";
-import { ProductItem } from "../../types/models";
+import { ProductCommercialItem } from "../../types/models";
 import { formatNumberWithCommas } from "../../helper/money";
 import { color } from "../../utils";
 
 type Props = {
-  productItemList: ProductItem[];
+  productItemList: ProductCommercialItem[];
 };
 const CustomCollapsible: React.FC<Props> = ({ productItemList }) => {
   const [activeSections, setActiveSections] = useState([]);
@@ -33,7 +33,7 @@ const CustomCollapsible: React.FC<Props> = ({ productItemList }) => {
     );
   };
 
-  const renderContent = (section: ProductItem) => {
+  const renderContent = (section: ProductCommercialItem) => {
     return (
       <View style={styles.content}>
         <Slide item={section.product.image} />
@@ -61,7 +61,7 @@ const CustomCollapsible: React.FC<Props> = ({ productItemList }) => {
             </Text>
           </View>
           <Text style={{ fontFamily: "RobotoSlab-Medium", fontSize: 16 }}>
-            {section.product.supplier.fullName}
+            {section.product.dates[0].actor.fullName}
           </Text>
           <Text
             style={{
@@ -96,4 +96,4 @@ const CustomCollapsible: React.FC<Props> = ({ productItemList }) => {
   );
 };
 
-export default CustomCollapsible;
+export default React.memo(CustomCollapsible);

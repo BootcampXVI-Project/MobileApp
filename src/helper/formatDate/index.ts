@@ -19,9 +19,10 @@ export function convertTimeString(timeString: string): TimeInfo {
   return { date: `${day}/${month}`, time: `${hour}:${minute}` };
 }
 
-export function convertToUTC(timestamp: string): string {
+export function convertToUTC(timestamp?: string): string {
+  if (!timestamp) return "";
   // Split the timestamp into date and time components
-  const [datePart, timePart] = timestamp.split(" ");
+  const [datePart, timePart] = timestamp?.split(" ");
 
   // Remove the trailing "UTC" from the time component
   const timeWithoutUTC = timePart.replace(" UTC", "");

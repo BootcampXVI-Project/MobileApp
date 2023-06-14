@@ -1,6 +1,6 @@
 import { createAPI } from "../axiosConfig";
 import { loadDone, loadStart } from "../../redux/features/load";
-import { ProductIdItem, ProductItem } from "../../types/models";
+import { ProductIdItem } from "../../types/models";
 
 export const getCart = async (token: string, dispatch: any) => {
   try {

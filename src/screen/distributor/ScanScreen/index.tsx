@@ -39,9 +39,18 @@ const ScanScreen = () => {
       if (parseUrl(data)?.path === "order") {
         navigation.navigate("OrderDetailScreen", parseUrl(data)?.id);
       } else if (parseUrl(data)?.path === "product") {
-        navigation.navigate("ProductScreen", parseUrl(data)?.id);
+        navigation.navigate("ProductScreen", {
+          isProduct: true,
+          id: parseUrl(data)?.id,
+        });
+      } else if (parseUrl(data)?.path === "product-commercial") {
+        navigation.navigate("ProductScreen", {
+          isProduct: false,
+          id: parseUrl(data)?.id,
+        });
       }
     }
+
     setTimeout(() => {
       setText("");
     }, 5000);

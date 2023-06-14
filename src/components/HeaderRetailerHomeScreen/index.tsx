@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     fontFamily: "RobotoSlab-Medium",
   },
   address: {
+    width: windowWidth * 0.5,
     fontSize: 14,
     color: "#fff",
     fontFamily: "RobotoSlab-VariableFont_wght",

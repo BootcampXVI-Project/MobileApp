@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import { color } from "../../../utils";
+import { color, windowWidth } from "../../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../api/auth";
 import Profile from "../../../components/Profile";
@@ -21,7 +21,7 @@ const SettingScreen = (props: Props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const user = useSelector((state: any) => state?.auth?.user);
-  console.log(user);
+  // console.log(user);
 
   return (
     // <SafeAreaView style={styles.container}>
@@ -116,7 +116,9 @@ const SettingScreen = (props: Props) => {
               fontSize: 18,
               fontFamily: "RobotoSlab-Medium",
               color: color.Primary,
+              width: windowWidth * 0.76,
             }}
+            numberOfLines={1}
           >
             {user?.user?.address}
           </Text>
@@ -136,7 +138,7 @@ const SettingScreen = (props: Props) => {
             fontSize: 18,
           }}
         >
-          Logout
+          Log out
         </Text>
       </TouchableOpacity>
     </ScrollView>

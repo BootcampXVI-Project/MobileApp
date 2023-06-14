@@ -11,7 +11,8 @@ import { GOOGLE_MAPS_APIKEY, color, getDelta } from "../../utils";
 import { Text, TouchableOpacity, View, Image, Platform } from "react-native";
 
 type Props = {
-  retailerAddress?: string;
+  retailerAddress: string;
+  retailerName: string;
 };
 
 const coordinates = [
@@ -26,15 +27,26 @@ const coordinates = [
 ];
 
 type Location = {
-  longitude?: number;
-  latitude?: number;
+  longitude: number;
+  latitude: number;
 };
 
-const MapComponent: React.FC<Props> = ({ retailerAddress }) => {
-  const [location, setLocation] = useState<any>(null);
+const MapComponent: React.FC<Props> = ({ retailerAddress, retailerName }) => {
+  const [location, setLocation] = useState<Location>({
+    longitude: 0,
+    latitude: 0,
+  });
+  const [retailerLocation, setRetailerLocation] = useState<Location>({
+    longitude: 0,
+    latitude: 0,
+  });
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const { latitudeDelta, longitudeDelta } = getDelta(coordinates);
+  let delta: { latitudeDelta: number; longitudeDelta: number };
+  delta = {
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
+  };
 
   const navigation = useNavigation();
   useEffect(() => {
@@ -48,59 +60,57 @@ const MapComponent: React.FC<Props> = ({ retailerAddress }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
     })();
   }, []);
-  const [retailerLocation, setRetailerLocation] = useState<Location>({
-    longitude: undefined,
-    latitude: undefined,
-  });
+
   useEffect(() => {
-    getGeolocation(retailerAddress || "")
-      .then((result) => {
-        if (result) {
-          setRetailerLocation(result);
-        } else {
-          console.log("Không tìm thấy kết quả.");
-        }
-      })
-      .catch((error) => {
-        console.error("Lỗi:", error);
-      })
-      .finally(() => {});
-  }, []);
+    if (retailerAddress !== "") {
+      getGeolocation(retailerAddress)
+        .then((result) => {
+          if (result) {
+            setRetailerLocation(result);
+          } else {
+            console.log("Không tìm thấy kết quả.");
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi:", error);
+        })
+        .finally(() => {});
+    }
+  }, [retailerAddress]);
 
   // console.log(location);
+  // console.log(retailerLocation);
+
+  let coordinates = [location, retailerLocation];
+  // console.log(coordinates);
 
   const handlePress = () => {
     // Xử lý sự kiện onPress
-    navigation.navigate("MapScreen", coordinates);
+    navigation.navigate("DistributorMapScreen", coordinates);
   };
   return (
     <View style={[styles.container, styles.shadow]}>
       {errorMsg ? (
         <Text>{errorMsg}</Text>
-      ) : location ? (
+      ) : location && retailerLocation.latitude ? (
         <MapView
           style={[styles.map, styles.shadow]}
           initialRegion={{
             latitude: coordinates[0]?.latitude,
             longitude: coordinates[0]?.longitude,
-            latitudeDelta: latitudeDelta,
-            longitudeDelta: longitudeDelta,
+            latitudeDelta: delta?.latitudeDelta,
+            longitudeDelta: delta?.longitudeDelta,
           }}
         >
-          {coordinates.map(
-            (coordinate, index) => (
-              <Marker key={`coordinate_${index}`} coordinate={coordinate} />
-            ) // eslint-disable-line react/no-array-index-key
-          )}
-          {/* <Marker
-            coordinate={{
-              latitude: coordinates[0]?.latitude,
-              longitude: coordinates[0]?.longitude,
-            }}
-          /> */}
+          {coordinates.map((coordinate, index) => (
+            <Marker key={`coordinate_${index}`} coordinate={coordinate} />
+          ))}
           {coordinates.length === 2 && (
             <MapViewDirections
               origin={coordinates[0]}
@@ -125,8 +135,9 @@ const MapComponent: React.FC<Props> = ({ retailerAddress }) => {
         </Text>
         <Text
           style={{ fontFamily: "RobotoSlab-VariableFont_wght", fontSize: 15 }}
+          numberOfLines={1}
         >
-          223-225-227 Nguyen Phuoc Lan, Da Nang
+          {retailerAddress}
         </Text>
         <Text
           style={{
@@ -135,11 +146,11 @@ const MapComponent: React.FC<Props> = ({ retailerAddress }) => {
             color: color.Primary,
           }}
         >
-          [Eureka] Tuan (Eden) D.T. HUYNH
+          {retailerName}
         </Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default MapComponent;
+export default React.memo(MapComponent);

@@ -70,11 +70,12 @@ const OrderDetailScreen = (props: Props) => {
       ),
     });
   }, []);
-  const [order, setOrder] = useState<Order | undefined>();
+  const [order, setOrder] = useState<Order>();
 
   const callApi = async () => {
     dispatch(loadStart());
     const order = await getOrderById(orderId, user.token, dispatch);
+
     setOrder(order);
     dispatch(loadDone());
   };
@@ -86,15 +87,15 @@ const OrderDetailScreen = (props: Props) => {
     }, [])
   );
   const [isImageViewVisible, setIsImageViewVisible] = useState<boolean>(false);
-
   const signatureObject = {
-    distributorSignature: order?.signature?.[0],
-    retailerSignature: order?.signature?.[1],
+    retailerSignature: order?.signatures?.[order?.signatures.length - 1] || "",
+    distributorSignature: order?.signatures?.[1] || "",
   };
   const images = Object.entries(signatureObject).map(([title, url]) => ({
     title,
     url: url || "",
   }));
+
   return (
     <>
       <FlatList

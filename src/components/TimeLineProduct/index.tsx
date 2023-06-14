@@ -44,7 +44,10 @@ const TimeLineProduct = React.memo(function TimeLineProduct({ data }: Props) {
                   {rowData?.actor?.fullName}
                 </Text>
               </Text>
-              <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
+              <Text
+                style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}
+                numberOfLines={1}
+              >
                 Address:{" "}
                 <Text style={{ fontFamily: "RobotoSlab-Medium" }}>
                   {rowData?.actor?.address}

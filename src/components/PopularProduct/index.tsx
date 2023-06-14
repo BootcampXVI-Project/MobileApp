@@ -18,7 +18,12 @@ const PopularProduct: React.FC<Props> = ({ product, index }) => {
   return (
     <TouchableOpacity
       style={[styles.container, { marginLeft: index == 0 ? 20 : 0 }]}
-      // onPress={() => navigation.navigate("ProductScreen", product.productId)}
+      onPress={() =>
+        navigation.navigate("ProductScreen", {
+          isProduct: true,
+          id: product.productId,
+        })
+      }
     >
       <View style={styles.container_child1}>
         <View style={styles.companyBox}>
@@ -61,13 +66,20 @@ const PopularProduct: React.FC<Props> = ({ product, index }) => {
         <View
           style={{
             flexDirection: "row",
-            alignItems: "center",
-            marginHorizontal: 8,
+            alignItems: "flex-end",
+            marginLeft: 8,
             marginBottom: 12,
+            width: 80,
           }}
         >
           {/* <MaterialIcons name="attach-money" size={24} color={color.Primary} /> */}
-          <Text style={{ color: "#7F879E", marginLeft: -6 }}>
+          <Text
+            style={{
+              color: color.Primary,
+              fontFamily: "RobotoSlab-Medium",
+            }}
+            numberOfLines={1}
+          >
             {formatNumberWithCommas(product?.price)} VND
           </Text>
         </View>

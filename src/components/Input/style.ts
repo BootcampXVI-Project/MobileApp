@@ -10,8 +10,9 @@ const styles = StyleSheet.create({
   },
   eyeButton: {
     position: "absolute",
-    right: windowWidth * 0.056,
-    top: windowHeight * 0.028,
+    right: windowWidth * 0.034,
+    top: windowHeight * 0.014,
+    padding: 8,
   },
 });
 

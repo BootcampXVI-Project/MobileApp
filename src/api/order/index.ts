@@ -1,6 +1,10 @@
 import { createAPI } from "../axiosConfig";
 import { loadDone, loadStart } from "../../redux/features/load";
-import { OrderForCreate } from "../../types/models";
+import {
+  OrderForCreate,
+  OrderForUpdateFinish,
+  OrderPayloadForCreate,
+} from "../../types/models";
 
 export const getAllOrders = async (
   token: any,
@@ -92,7 +96,7 @@ export const getOrdersOfDistributorByStatus = async (
 ) => {
   try {
     const api = createAPI(token);
-    console.log(status);
+    // console.log(status);
 
     const res = await api.get(`/order/all/of-distributor?status=${status}`);
 
@@ -113,7 +117,7 @@ export const getOrdersOfDistributorByStatus = async (
 };
 
 export const createOrder = async (
-  order: OrderForCreate,
+  order: OrderPayloadForCreate,
   token: string,
   dispatch: any
 ) => {
@@ -127,6 +131,63 @@ export const createOrder = async (
       console.log("ORDER CREATE", res?.data);
 
       return res?.data;
+    }
+  } catch (error: any) {
+    if (error.response) {
+      console.log("Server response error:", error.response.data);
+    } else if (error.request) {
+      console.log("No response from server:", error.request);
+    } else {
+      console.log("Error:", error.message);
+    }
+
+    dispatch(loadDone());
+  }
+};
+export const updateOrder = async (
+  order: OrderForUpdateFinish,
+  token: string,
+  dispatch: any
+) => {
+  try {
+    // dispatch(loadStart());
+
+    const api = createAPI(token);
+    const res = await api.patch(`/order/update`, { orderObj: order });
+
+    if (res.status === 200) {
+      console.log("ORDER UPDATE", res?.data);
+
+      return res?.data.data;
+    }
+  } catch (error: any) {
+    if (error.response) {
+      console.log("Server response error:", error.response.data);
+    } else if (error.request) {
+      console.log("No response from server:", error.request);
+    } else {
+      console.log("Error:", error.message);
+    }
+
+    dispatch(loadDone());
+  }
+};
+
+export const finishOrder = async (
+  order: OrderForUpdateFinish,
+  token: string,
+  dispatch: any
+) => {
+  try {
+    // dispatch(loadStart());
+
+    const api = createAPI(token);
+    const res = await api.post(`/order/finish`, { orderObj: order });
+
+    if (res.status === 200) {
+      console.log("ORDER FINISH", res?.data);
+
+      return res?.data.data;
     }
   } catch (error: any) {
     if (error.response) {

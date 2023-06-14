@@ -8,6 +8,7 @@ import { Order } from "../../types/models";
 import { Item } from "react-native-paper/lib/typescript/src/components/Drawer/Drawer";
 import { calculateTotalAmount } from "../../helper/calculateMoneyCart";
 import { formatNumberWithCommas } from "../../helper/money";
+import { convertTimeString, convertToUTC } from "../../helper/formatDate";
 
 type Props = {
   isShowStatus?: boolean;
@@ -45,7 +46,8 @@ const ItemOrderView: React.FC<Props> = ({
           }}
           numberOfLines={1}
         >
-          {item?.updateDate}
+          {convertTimeString(convertToUTC(item?.updateDate || "")).date}{" "}
+          {convertTimeString(convertToUTC(item?.updateDate || "")).time}
         </Text>
         <Text
           style={{ fontFamily: "RobotoSlab-SemiBold", fontSize: 16 }}
@@ -59,9 +61,17 @@ const ItemOrderView: React.FC<Props> = ({
               backgroundColor={
                 selectList == 0
                   ? "rgb(163, 255, 163)"
+                  : selectList == 1
+                  ? "#699ff0"
                   : "rgba(250, 204, 21, 0.32)"
               }
-              color={selectList == 0 ? color.Primary : color.Secondary}
+              color={
+                selectList == 0
+                  ? color.Primary
+                  : selectList == 1
+                  ? color.Shipping
+                  : color.Secondary
+              }
               fontSize={16}
               text={item?.status || ""}
             />
@@ -73,7 +83,12 @@ const ItemOrderView: React.FC<Props> = ({
       <View style={[styles.price, { paddingHorizontal: 4, width: 110 }]}>
         <Text
           style={{
-            color: selectList == 0 ? color.Primary : color.Secondary,
+            color:
+              selectList == 0
+                ? color.Primary
+                : selectList == 1
+                ? color.Shipping
+                : color.Secondary,
             fontFamily: "RobotoSlab-Bold",
             fontSize: 16,
             textAlign: "left",

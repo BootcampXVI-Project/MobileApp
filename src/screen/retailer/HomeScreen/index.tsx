@@ -8,7 +8,11 @@ import {
   Platform,
   FlatList,
 } from "react-native";
-import { ManufacturedProduct, Product } from "../../../types/models";
+import {
+  ManufacturedProduct,
+  Product,
+  ProductNumber,
+} from "../../../types/models";
 import SearchBar from "../../../components/SearchBar";
 import { useDispatch, useSelector } from "react-redux";
 import PRODUCT from "../../../../assets/products.json";
@@ -90,8 +94,9 @@ const HomeScreen = (props: Props) => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
   const [newProducts, setNewProducts] = useState<ManufacturedProduct[]>([]);
-  const [popular, setPopular] = useState();
+  const [popular, setPopular] = useState<ProductNumber[]>([]);
 
   const callApi = async () => {
     // dispatch(loadStart());
@@ -142,21 +147,21 @@ const HomeScreen = (props: Props) => {
             </Text>
             <FlatList
               horizontal
-              data={PRODUCT?.data}
-              keyExtractor={(item) => item.productId}
+              data={popular}
+              keyExtractor={(item) => item.product.productId}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               renderItem={({
                 item,
                 index,
               }: {
-                item: Product;
+                item: ProductNumber;
                 index: number;
               }) => {
                 return (
                   <PopularProduct
-                    product={item}
-                    key={item.productId}
+                    product={item.product}
+                    key={item.product.productId}
                     index={index}
                   />
                 );

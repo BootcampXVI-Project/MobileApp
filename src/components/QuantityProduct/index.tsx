@@ -53,7 +53,7 @@ const Quantity: React.FC<Props> = ({
         {quantity}
       </Text>
       <TouchableOpacity
-        disabled={quantity == Number(amount) ? true : false}
+        disabled={quantity >= Number(amount) ? true : false}
         onPress={() => {
           setQuantity(quantity + 1);
         }}
@@ -62,7 +62,7 @@ const Quantity: React.FC<Props> = ({
           width: 25,
           borderRadius: 25 / 2,
           backgroundColor:
-            quantity == Number(amount) ? "gray" : color.Secondary,
+            quantity >= Number(amount) ? "gray" : color.Secondary,
           justifyContent: "center",
           alignItems: "center",
         }}

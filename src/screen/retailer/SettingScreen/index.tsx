@@ -163,7 +163,7 @@ const SettingScreen = (props: Props) => {
             fontSize: 18,
           }}
         >
-          Logout
+          Log out
         </Text>
       </TouchableOpacity>
     </View>

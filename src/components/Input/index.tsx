@@ -14,6 +14,7 @@ type Props = {
   control: any;
   name: any;
   rules: any;
+  onPress?: any;
 };
 
 const LoginInput: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const LoginInput: React.FC<Props> = ({
   control,
   name,
   rules = {},
+  onPress,
 }) => {
   const [eyePassword, setEyePassword] = useState(secureTextEntry);
   return (
@@ -57,6 +59,7 @@ const LoginInput: React.FC<Props> = ({
             value={value}
             onChangeText={onChange}
             useNativeDriver
+            onFocus={onPress}
           />
           {secureTextEntry && (
             <TouchableOpacity

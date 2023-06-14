@@ -20,6 +20,8 @@ const StautsOrderComponent: React.FC<Props> = ({ status }) => {
               ? color.Shipping
               : status === "PENDING"
               ? color.Pending
+              : status === "APPROVED"
+              ? color.Pending
               : "#fff",
         },
       ]}
@@ -33,6 +35,8 @@ const StautsOrderComponent: React.FC<Props> = ({ status }) => {
               : status === "SHIPPING"
               ? color.Shipping
               : status === "PENDING"
+              ? color.Pending
+              : status === "APPROVED"
               ? color.Pending
               : "#000",
           fontSize: 16,
@@ -72,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StautsOrderComponent;
+export default React.memo(StautsOrderComponent);

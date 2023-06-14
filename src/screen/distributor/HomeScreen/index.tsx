@@ -51,7 +51,7 @@ const HomeScreen = (props: Props) => {
           width: 200,
           transform: [{ rotate: "-90deg" }],
           position: "absolute",
-          top: 260,
+          top: 320,
           left: -94,
         }}
       >
@@ -88,15 +88,43 @@ const HomeScreen = (props: Props) => {
             backgroundColor: selectList === 1 ? "gray" : color.Primary,
             paddingHorizontal: 8,
             paddingVertical: 12,
+            width: 100,
+            marginRight: 20,
+            alignItems: "center",
+            borderRadius: 12,
+          }}
+          disabled={selectList === 1 ? true : false}
+          onPress={() => {
+            setSelectList(1);
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              // fontWeight: "500",
+              fontFamily: "RobotoSlab-Medium",
+              color: "#fff",
+              // marginTop: 12,
+              bottom: -4,
+            }}
+          >
+            Shipping
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: selectList === 2 ? "gray" : color.Primary,
+            paddingHorizontal: 8,
+            paddingVertical: 12,
             marginRight: 20,
             width: 100,
             alignItems: "center",
             borderRadius: 12,
           }}
           onPress={() => {
-            setSelectList(1);
+            setSelectList(2);
           }}
-          disabled={selectList === 1 ? true : false}
+          disabled={selectList === 2 ? true : false}
         >
           <Text
             style={{

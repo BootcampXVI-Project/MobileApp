@@ -5,36 +5,36 @@ import {
   FlatList,
   TouchableOpacity,
   Platform,
-  Modal,
 } from "react-native";
-import { Product, ProductIdItem } from "../../../types/models";
+import {
+  Product,
+  ProductCommercial,
+  ProductIdItem,
+} from "../../../types/models";
 import { FontAwesome } from "@expo/vector-icons";
 import { color, windowWidth } from "../../../utils";
-import React, { useLayoutEffect, useState, useMemo } from "react";
 import Slide from "../../../components/SlideImage/Slide";
 import Quantity from "../../../components/QuantityProduct";
 import ProductInfor from "../../../components/ProductInfor";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import React, { useLayoutEffect, useState, useMemo } from "react";
 
 import {
   useFocusEffect,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import { previousDay } from "date-fns";
-import TimeLineProduct from "../../../components/TimeLineProduct";
-import { getProductById } from "../../../api/product";
 import { useDispatch, useSelector } from "react-redux";
+import { showMessage } from "react-native-flash-message";
+import TimeLineProduct from "../../../components/TimeLineProduct";
 import { loadDone, loadStart } from "../../../redux/features/load";
 import { addProductToCart, getLenghtCart } from "../../../api/cart";
-
-type Props = {};
+import { getProductById, getProductCommercialById } from "../../../api/product";
 
 const ProductInformation = React.memo(function ProductInformation({
   item,
 }: {
-  item?: Product;
+  item?: Product | ProductCommercial;
 }) {
   return (
     <FlatList
@@ -57,6 +57,11 @@ const ProductInformation = React.memo(function ProductInformation({
   );
 });
 
+type Props = {
+  isProduct: boolean;
+  id: string;
+};
+
 const ProductScreen = (props: Props) => {
   const route = useRoute();
   const navigation = useNavigation();
@@ -65,20 +70,31 @@ const ProductScreen = (props: Props) => {
 
   // const item: Product = route.params as Product;
 
-  const item: string = useMemo(() => {
-    return route.params as unknown as string;
+  const item: Props = useMemo(() => {
+    return route.params as unknown as Props;
   }, [route.params]);
+  // console.log(item);
 
   const user = useSelector((state: any) => state?.auth?.user);
   const dispatch = useDispatch();
-  const [product, setProduct] = useState<Product>();
+  const [product, setProduct] = useState<Product | any>();
 
   const callApi = async () => {
     dispatch(loadStart());
-    const product = await getProductById(item, user.token, dispatch);
-    setProduct(product);
+    if (item.isProduct) {
+      const product = await getProductById(item.id, user.token, dispatch);
+      setProduct(product);
+    } else {
+      const product = await getProductCommercialById(
+        item.id,
+        user.token,
+        dispatch
+      );
+      setProduct(product);
+    }
     dispatch(loadDone());
   };
+  // console.log(product);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -90,7 +106,7 @@ const ProductScreen = (props: Props) => {
   const addtocart = async () => {
     // addCart(data);
     const addProduct: ProductIdItem = {
-      productId: item,
+      productId: product?.productId || "",
       quantity: String(quantity),
     };
     const responeAddProduct = await addProductToCart(
@@ -109,9 +125,11 @@ const ProductScreen = (props: Props) => {
       icon: "success",
       style: {
         alignItems: "center",
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
+        borderRadius: 20,
         paddingVertical: 20,
+        marginHorizontal: 20,
+        borderWidth: 4,
+        borderColor: "#fff",
       },
     });
   };
@@ -173,6 +191,7 @@ const ProductScreen = (props: Props) => {
                 right: -8,
                 alignItems: "center",
                 justifyContent: "center",
+                zIndex: 10,
               }}
             >
               <Text

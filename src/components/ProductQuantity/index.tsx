@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Quantity from "../QuantityProduct";
 import { color, windowHeight, windowWidth } from "../../utils";
 import Swipeable from "react-native-gesture-handler/Swipeable";
@@ -21,6 +21,7 @@ type Props = {
   setListProductOrder: any;
   setCart: any;
 };
+
 const rightSwipeActions = () => {
   return (
     <View
@@ -45,6 +46,7 @@ const rightSwipeActions = () => {
     </View>
   );
 };
+
 const swipeFromRightOpen = async (setViewQuestion: any) => {
   setViewQuestion(true);
 };
@@ -58,21 +60,29 @@ const ProductQuantity: React.FC<Props> = ({
   const [quantity, setQuantity] = useState(Number(item.quantity));
   const [viewQuestion, setViewQuestion] = useState(false);
 
+  const swipeableRef = useRef(null);
   const navigation = useNavigation();
   const user = useSelector((state: any) => state?.auth?.user);
   const dispatch = useDispatch();
 
   const callApi = async () => {
-    // dispatch(loadStart());
+    setListProductOrder([]);
     const product = await getProductById(item.productId, user.token, dispatch);
     setProduct(product);
     setListProductOrder((previous: any) => {
       return [...previous, { product: product, quantity: quantity }];
     });
   };
+
+  const closeSwipeable = () => {
+    swipeableRef.current?.close();
+  };
+
   const funCancel = () => {
+    closeSwipeable();
     setViewQuestion(false);
   };
+
   const funSuccess = async (
     token: string,
     dispatch: any,
@@ -81,7 +91,10 @@ const ProductQuantity: React.FC<Props> = ({
     setCart: any
   ) => {
     const deleteProduct = await deleteProductInCart(token, dispatch, product);
+    console.log(deleteProduct);
+
     setCart(deleteProduct);
+
     setListProductOrder((previous: any) => {
       const even = (element: any) =>
         element?.product?.productId == product.productId;
@@ -92,6 +105,9 @@ const ProductQuantity: React.FC<Props> = ({
         return [...new_prev];
       }
     });
+
+    closeSwipeable();
+
     setViewQuestion(false);
   };
 
@@ -110,25 +126,17 @@ const ProductQuantity: React.FC<Props> = ({
       : null;
   }, [quantity]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      callApi();
-      return () => {};
-    }, [])
-  );
+  useEffect(() => {
+    callApi();
+  }, [item]);
+
   return (
     <>
       <Swipeable
+        ref={swipeableRef}
         renderRightActions={rightSwipeActions}
         onSwipeableRightOpen={() => {
-          swipeFromRightOpen(
-            // user.token,
-            // dispatch,
-            // item,
-            // setListProductOrder,
-            // setCart
-            setViewQuestion
-          );
+          swipeFromRightOpen(setViewQuestion);
         }}
       >
         <View style={[styles.container, styles.shadow]}>

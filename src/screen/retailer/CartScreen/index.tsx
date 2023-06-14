@@ -24,7 +24,9 @@ import {
 } from "react-native";
 import {
   OrderForCreate,
+  OrderPayloadForCreate,
   ProductIdItem,
+  ProductIdQRCodeItem,
   ProductItem,
 } from "../../../types/models";
 
@@ -73,28 +75,31 @@ const CartScreen = (props: Props) => {
   const callApi = async () => {
     dispatch(loadStart());
     const cart = await getCart(user.token, dispatch);
-    // console.log(cart);
 
     setCart(cart);
 
     dispatch(loadDone());
   };
+
   useFocusEffect(
     React.useCallback(() => {
       callApi();
       return () => {};
     }, [])
   );
+
   const funCancel = () => {
     setViewQuestion(false);
   };
+
   const funSuccess = async () => {
     setLoad(true);
     setResponseCreateOder(null);
-    var order: OrderForCreate = {
+    var order: OrderPayloadForCreate = {
       productIdItems: cart,
       signatures: [user?.user?.signature],
       deliveryStatus: { address: user?.user?.address },
+      qrCode: "",
     };
     const response = await createOrder(order, user?.token, dispatch);
     deleteCart(user?.token, dispatch);
@@ -107,17 +112,20 @@ const CartScreen = (props: Props) => {
       }
     }, 1500);
   };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <FlatList
         data={cart}
-        renderItem={({ item }: { item: any }) => (
-          <ProductQuantity
-            item={item}
-            setListProductOrder={setListProductOrder}
-            setCart={setCart}
-          />
-        )}
+        renderItem={({ item }: { item: any }) => {
+          return (
+            <ProductQuantity
+              item={item}
+              setListProductOrder={setListProductOrder}
+              setCart={setCart}
+            />
+          );
+        }}
         style={{ marginTop: 12 }}
       />
       {cart.length == 0 ? (

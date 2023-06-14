@@ -36,10 +36,20 @@ const ScanScreen = () => {
     if (data !== text) {
       setText(data);
       //parseUrl(data)
+      // console.log(parseUrl(data));
+
       if (parseUrl(data)?.path === "order") {
         navigation.navigate("OrderDetailScreen", parseUrl(data)?.id);
       } else if (parseUrl(data)?.path === "product") {
-        navigation.navigate("ProductScreen", parseUrl(data)?.id);
+        navigation.navigate("ProductScreen", {
+          isProduct: true,
+          id: parseUrl(data)?.id,
+        });
+      } else if (parseUrl(data)?.path === "product-commercial") {
+        navigation.navigate("ProductScreen", {
+          isProduct: false,
+          id: parseUrl(data)?.id,
+        });
       }
     }
     setTimeout(() => {
@@ -80,17 +90,6 @@ const ScanScreen = () => {
             left: Platform.OS === "ios" ? 0 : -30,
           }}
         >
-          {/* <View
-            style={[
-              {
-                height: 50,
-                width: 50,
-                backgroundColor: "red",
-                position: "absolute",
-              },
-            ]}
-          /> */}
-
           <Svg height="100%" width="100%">
             <Defs>
               <Mask id="mask" x="0" y="0" width="100%" height="100%">

@@ -19,7 +19,10 @@ const NewProduct: React.FC<Props> = ({ product }) => {
     <TouchableOpacity
       style={styles.container}
       onPress={() =>
-        navigation.navigate("ProductScreen", product?.product.productId)
+        navigation.navigate("ProductScreen", {
+          isProduct: true,
+          id: product?.product.productId,
+        })
       }
     >
       <Image
@@ -54,7 +57,7 @@ const NewProduct: React.FC<Props> = ({ product }) => {
             color: color.Primary,
           }}
         >
-          {convertTimeString(convertToUTC(product?.manufacturedDate)).date}
+          {convertTimeString(convertToUTC(product?.date)).date}
         </Text>
         <Text
           style={{

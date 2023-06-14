@@ -94,6 +94,7 @@ function App({
   const dispatch = useDispatch();
   const [ordersShipped, setOrdersShipped] = useState<Order[]>([]);
   const [ordersApproved, setOrdersApproved] = useState<Order[]>([]);
+  const [ordersShipping, setOrdersShipping] = useState<Order[]>([]);
 
   const callApi = async () => {
     // dispatch(loadStart());
@@ -103,6 +104,12 @@ function App({
       dispatch
     );
     setOrdersShipped(shipped);
+    const shipping = await getOrdersOfDistributorByStatus(
+      "SHIPPING",
+      token,
+      dispatch
+    );
+    setOrdersShipping(shipping);
     const approved = await getOrdersOfDistributorByStatus(
       "APPROVED",
       token,
@@ -116,7 +123,7 @@ function App({
     React.useCallback(() => {
       callApi();
       return () => {};
-    }, [])
+    }, [selectList])
   );
   const [searchPhrase, setSearchPhrase] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
@@ -208,7 +215,13 @@ function App({
         setClicked={setClicked}
       />
       <Animated.FlatList
-        data={selectList == 1 ? ordersApproved : ordersShipped}
+        data={
+          selectList == 1
+            ? ordersShipping
+            : selectList == 0
+            ? ordersShipped
+            : ordersApproved
+        }
         style={{
           zIndex: 2,
           paddingHorizontal: 16,

@@ -1,6 +1,12 @@
-import { Product, ProductItem } from "../../types/models";
+import {
+  Product,
+  ProductCommercialItem,
+  ProductItem,
+} from "../../types/models";
 
-export function calculateTotalAmount(products: ProductItem[] | []) {
+export function calculateTotalAmount(
+  products: ProductItem[] | ProductCommercialItem[] | []
+) {
   let totalAmount = 0;
   for (const item of products) {
     const product = item.product;

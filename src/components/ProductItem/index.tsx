@@ -2,10 +2,13 @@ import React from "react";
 import { windowHeight, windowWidth } from "../../utils";
 import { useNavigation } from "@react-navigation/native";
 import { formatNumberWithCommas } from "../../helper/money";
-import { ProductItem as ProductItemType } from "../../types/models";
+import {
+  ProductCommercialItem,
+  ProductItem as ProductItemType,
+} from "../../types/models";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 type Props = {
-  item: ProductItemType;
+  item: ProductCommercialItem;
 };
 
 const ProductItem: React.FC<Props> = ({ item }) => {
@@ -14,7 +17,10 @@ const ProductItem: React.FC<Props> = ({ item }) => {
     <TouchableOpacity
       style={[styles.container, styles.shadow]}
       onPress={() => {
-        navigation.navigate("ProductScreen", item.product.productId);
+        navigation.navigate("ProductScreen", {
+          isProduct: false,
+          id: item.product.productCommercialId,
+        });
       }}
     >
       <Image
