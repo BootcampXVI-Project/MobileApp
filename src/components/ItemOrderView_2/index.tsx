@@ -1,6 +1,6 @@
 import Tag from "../Tag";
 import styles from "./style";
-import { color } from "../../utils";
+import { color, windowWidth } from "../../utils";
 import React, { useState } from "react";
 import { Order } from "../../types/models";
 import { useNavigation } from "@react-navigation/native";
@@ -25,6 +25,8 @@ const IMAGE_STATUS: ImageStatus = {
     "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fpending-icon-512x504-9zrlrc78-removebg-preview.png?alt=media&token=db8619b0-1b40-41bb-b5e6-e01b93e284ab&_gl=1*isird*_ga*MjQ1MDY3NTA3LjE2ODQ5MTY0MzI.*_ga_CW55HF8NVT*MTY4NTc3MTMzMy4xMS4xLjE2ODU3NzEzNDAuMC4wLjA.",
   shipped:
     "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2Fshipped.png?alt=media&token=5508cc3e-c5a0-4a33-aca9-11b63f7a4137&_gl=1*4cmtqe*_ga*MjQ1MDY3NTA3LjE2ODQ5MTY0MzI.*_ga_CW55HF8NVT*MTY4NTc3MTMzMy4xMS4xLjE2ODU3NzE1OTkuMC4wLjA.",
+  approved:
+    "https://firebasestorage.googleapis.com/v0/b/supply-chain-9ea64.appspot.com/o/mobileApp%2F353078886_477557671236837_2532976276656416248_n.png?alt=media&token=a5bae90f-9b7e-4d89-adfc-5d71c67e3d2e",
 };
 
 const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
@@ -43,8 +45,8 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
           source={{
             uri: IMAGE_STATUS[item?.status.toLowerCase()],
           }}
-          style={styles.logo}
-          resizeMode={"center"}
+          style={[styles.logo, {}]}
+          resizeMode={"contain"}
         />
         <View style={styles.content}>
           <Text
@@ -56,6 +58,8 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
                   ? color.Shipping
                   : item?.status.toLowerCase() == "shipped"
                   ? color.Primary
+                  : item?.status.toLowerCase() == "approved"
+                  ? "#03a6fc"
                   : "rgb(255, 255, 163)",
               fontFamily: "RobotoSlab-Bold",
               fontSize: 18,
@@ -66,7 +70,11 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
             }`}
           </Text>
           <Text
-            style={{ fontFamily: "RobotoSlab-VariableFont_wght", fontSize: 14 }}
+            style={{
+              fontFamily: "RobotoSlab-VariableFont_wght",
+              fontSize: 14,
+              marginBottom: 4,
+            }}
           >
             {item.productItemList.length > 1
               ? `${item.productItemList.length} products`
@@ -82,6 +90,8 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
                     ? "#5a93e8"
                     : item?.status.toLowerCase() == "shipped"
                     ? "rgb(163, 255, 163)"
+                    : item?.status.toLowerCase() == "approved"
+                    ? "#a2ddfc"
                     : "rgb(255, 255, 163)"
                 }
                 color={
@@ -91,6 +101,8 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
                     ? color.Shipping
                     : item?.status.toLowerCase() == "shipped"
                     ? color.Primary
+                    : item?.status.toLowerCase() == "approved"
+                    ? "#03a6fc"
                     : "rgb(255, 255, 163)"
                 }
                 fontSize={16}
@@ -98,7 +110,12 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
               />
             </View>
           ) : (
-            <Text>
+            <Text
+              style={{
+                fontFamily: "RobotoSlab-VariableFont_wght",
+                fontSize: 14,
+              }}
+            >
               {item.productItemList.length > 1
                 ? `${item.productItemList.length} items`
                 : `${item.productItemList.length} item`}
@@ -116,6 +133,8 @@ const ItemOrderView_2: React.FC<Props> = ({ isShowStatus = false, item }) => {
                 ? color.Shipping
                 : item?.status.toLowerCase() == "shipped"
                 ? color.Primary
+                : item?.status.toLowerCase() == "approved"
+                ? "#03a6fc"
                 : "rgb(255, 255, 163)",
             fontFamily: "RobotoSlab-Bold",
             fontSize: 16,

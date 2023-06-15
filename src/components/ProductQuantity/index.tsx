@@ -66,7 +66,6 @@ const ProductQuantity: React.FC<Props> = ({
   const dispatch = useDispatch();
 
   const callApi = async () => {
-    setListProductOrder([]);
     const product = await getProductById(item.productId, user.token, dispatch);
     setProduct(product);
     setListProductOrder((previous: any) => {
@@ -91,20 +90,8 @@ const ProductQuantity: React.FC<Props> = ({
     setCart: any
   ) => {
     const deleteProduct = await deleteProductInCart(token, dispatch, product);
-    console.log(deleteProduct);
 
     setCart(deleteProduct);
-
-    setListProductOrder((previous: any) => {
-      const even = (element: any) =>
-        element?.product?.productId == product.productId;
-      if (previous?.some(even)) {
-        const new_prev = previous?.filter(
-          (element: any) => element?.product?.productId != product?.productId
-        );
-        return [...new_prev];
-      }
-    });
 
     closeSwipeable();
 

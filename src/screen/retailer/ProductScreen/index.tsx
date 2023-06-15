@@ -17,7 +17,7 @@ import Slide from "../../../components/SlideImage/Slide";
 import Quantity from "../../../components/QuantityProduct";
 import ProductInfor from "../../../components/ProductInfor";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import React, { useLayoutEffect, useState, useMemo } from "react";
+import React, { useLayoutEffect, useState, useMemo, useEffect } from "react";
 
 import {
   useFocusEffect,
@@ -99,21 +99,27 @@ const ProductScreen = (props: Props) => {
   useFocusEffect(
     React.useCallback(() => {
       callApi();
-      getLenghtCart(setLenghtCart, user.token, dispatch);
       return () => {};
     }, [])
   );
+
+  useEffect(() => {
+    getLenghtCart(setLenghtCart, user.token, dispatch);
+  }, []);
+
   const addtocart = async () => {
-    // addCart(data);
     const addProduct: ProductIdItem = {
       productId: product?.productId || "",
       quantity: String(quantity),
     };
+
     const responeAddProduct = await addProductToCart(
       user.token,
       dispatch,
       addProduct
     );
+
+    getLenghtCart(setLenghtCart, user.token, dispatch);
 
     showMessage({
       message: "Success",

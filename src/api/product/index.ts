@@ -1,4 +1,3 @@
-import { Response } from "express";
 import { createAPI } from "../axiosConfig";
 import { loadDone, loadStart } from "../../redux/features/load";
 import { ProductCommercial } from "../../types/models";
