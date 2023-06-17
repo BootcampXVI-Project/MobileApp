@@ -73,6 +73,11 @@ const ProductQuantity: React.FC<Props> = ({
     });
   };
 
+  const callApi_rerenderDelete = async () => {
+    const product = await getProductById(item.productId, user.token, dispatch);
+    setProduct(product);
+  };
+
   const closeSwipeable = () => {
     swipeableRef.current?.close();
   };
@@ -86,13 +91,21 @@ const ProductQuantity: React.FC<Props> = ({
     token: string,
     dispatch: any,
     product: ProductIdItem,
-    setListProductOrder: any,
     setCart: any
   ) => {
     const deleteProduct = await deleteProductInCart(token, dispatch, product);
 
     setCart(deleteProduct);
-
+    setListProductOrder((previous: any) => {
+      const even = (element: any) =>
+        element?.product?.productId == product.productId;
+      if (previous?.some(even)) {
+        const new_prev = previous?.filter(
+          (element: any) => element?.product?.productId != product?.productId
+        );
+        return [...new_prev];
+      }
+    });
     closeSwipeable();
 
     setViewQuestion(false);
@@ -115,6 +128,10 @@ const ProductQuantity: React.FC<Props> = ({
 
   useEffect(() => {
     callApi();
+  }, []);
+
+  useEffect(() => {
+    callApi_rerenderDelete();
   }, [item]);
 
   return (
@@ -167,13 +184,7 @@ const ProductQuantity: React.FC<Props> = ({
         <ConfirmModal
           funCancel={funCancel}
           funSuccess={() => {
-            funSuccess(
-              user.token,
-              dispatch,
-              item,
-              setListProductOrder,
-              setCart
-            );
+            funSuccess(user.token, dispatch, item, setCart);
           }}
           title="You want to delete this?"
         />

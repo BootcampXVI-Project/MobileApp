@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: null,
   isFetching: false,
+  message: null,
   error: false,
 };
 
@@ -12,13 +13,22 @@ export const authSlice = createSlice({
   reducers: {
     loginStart: (state) => {
       state.isFetching = true;
+      state.message = null;
+      state.error = false;
     },
     setUser: (state, action) => {
       state.user = action.payload;
+      state.message = null;
+      state.isFetching = false;
+      state.error = false;
+    },
+    resetMessage: (state) => {
+      state.message = null;
       state.isFetching = false;
       state.error = false;
     },
     loginFailed: (state, action) => {
+      state.message = action.payload;
       state.isFetching = false;
       state.error = true;
     },
@@ -42,6 +52,7 @@ export const {
   setUser,
   loginStart,
   loginFailed,
+  resetMessage,
   logoutFailed,
   logoutStart,
   logoutSuccess,

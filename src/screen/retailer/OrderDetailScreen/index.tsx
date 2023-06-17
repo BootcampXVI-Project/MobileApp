@@ -119,13 +119,14 @@ const OrderDetailScreen = (props: Props) => {
               style={{
                 marginTop: 12,
                 fontFamily: "RobotoSlab-VariableFont_wght",
-                fontSize: 12,
+                fontSize: 16,
+                marginVertical: 8,
               }}
             >
               Your Order:{" "}
               <Text
                 style={{
-                  fontSize: 14,
+                  fontSize: 18,
                   fontFamily: "RobotoSlab-Medium",
                 }}
               >
@@ -133,7 +134,14 @@ const OrderDetailScreen = (props: Props) => {
               </Text>
             </Text>
             <StautsOrderComponent status={order?.status} />
-            <Text style={{ fontFamily: "RobotoSlab-Medium", marginTop: 4 }}>
+            <Text
+              style={{
+                fontFamily: "RobotoSlab-VariableFont_wght",
+                fontSize: 16,
+                marginTop: 12,
+                marginBottom: 8,
+              }}
+            >
               List product
             </Text>
             <FlatList
@@ -144,7 +152,14 @@ const OrderDetailScreen = (props: Props) => {
               keyExtractor={(item) => item.product.productId}
               style={{ flex: 1 }}
             />
-            <Text style={{ fontFamily: "RobotoSlab-Medium", marginTop: 4 }}>
+            <Text
+              style={{
+                fontFamily: "RobotoSlab-VariableFont_wght",
+                fontSize: 16,
+                marginTop: 12,
+                marginBottom: 8,
+              }}
+            >
               Status order
             </Text>
             <TimeLineStatus

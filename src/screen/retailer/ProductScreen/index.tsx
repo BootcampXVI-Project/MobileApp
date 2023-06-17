@@ -30,6 +30,8 @@ import TimeLineProduct from "../../../components/TimeLineProduct";
 import { loadDone, loadStart } from "../../../redux/features/load";
 import { addProductToCart, getLenghtCart } from "../../../api/cart";
 import { getProductById, getProductCommercialById } from "../../../api/product";
+import ReactNativeModal from "react-native-modal";
+import ModalNullData from "../../../components/ModalNullData";
 
 const ProductInformation = React.memo(function ProductInformation({
   item,
@@ -67,6 +69,7 @@ const ProductScreen = (props: Props) => {
   const navigation = useNavigation();
   const [quantity, setQuantity] = useState(1);
   const [lenghtCart, setLenghtCart] = useState(0);
+  const [viewDataNull, setViewDataNull] = useState(false);
 
   // const item: Product = route.params as Product;
 
@@ -123,19 +126,24 @@ const ProductScreen = (props: Props) => {
 
     showMessage({
       message: "Success",
-      description: `${product?.productName} is added to cart.`,
-      textStyle: { fontFamily: "RobotoSlab-VariableFont_wght" },
-      titleStyle: { fontFamily: "RobotoSlab-Bold" },
+      description: `Your product is added to cart.`,
+      textStyle: {
+        fontFamily: "RobotoSlab-VariableFont_wght",
+        top: Platform.OS === "ios" ? -20 : undefined,
+      },
+      titleStyle: {
+        fontFamily: "RobotoSlab-Bold",
+        top: Platform.OS === "ios" ? -20 : undefined,
+      },
       type: "success",
       backgroundColor: color.Primary,
       icon: "success",
       style: {
-        alignItems: "center",
         borderRadius: 20,
-        paddingVertical: 20,
         marginHorizontal: 20,
         borderWidth: 4,
         borderColor: "#fff",
+        marginTop: 60,
       },
     });
   };
@@ -214,7 +222,7 @@ const ProductScreen = (props: Props) => {
         </TouchableOpacity>
       ),
     });
-  }, [item, navigation, lenghtCart]);
+  }, [item, navigation, lenghtCart, product?.productName]);
 
   return (
     <>
@@ -265,6 +273,16 @@ const ProductScreen = (props: Props) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <ReactNativeModal
+        isVisible={product ? false : true}
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <ModalNullData
+          funCancel={() => {
+            navigation.goBack();
+          }}
+        />
+      </ReactNativeModal>
     </>
   );
 };

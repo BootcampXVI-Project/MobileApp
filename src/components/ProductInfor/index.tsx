@@ -12,6 +12,7 @@ import { color, windowWidth } from "../../utils";
 import { formatNumberWithCommas } from "../../helper/money";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import ImageViewer from "react-native-image-zoom-viewer-fixed";
+import DescriptionProduct from "../DescriptionProduct";
 
 type Props = {
   data: any;
@@ -68,7 +69,7 @@ const ProductInfor: React.FC<Props> = ({ data }) => {
           />
         </TouchableOpacity>
       </View>
-      <Text
+      {/* <Text
         style={{
           fontFamily: "RobotoSlab-VariableFont_wght",
           marginVertical: 2,
@@ -76,7 +77,8 @@ const ProductInfor: React.FC<Props> = ({ data }) => {
         numberOfLines={3}
       >
         {data?.description}
-      </Text>
+      </Text> */}
+      <DescriptionProduct description={data?.description} />
       <TouchableOpacity
         onPress={() => {
           setIsCertificateViewVisible((prevState: boolean) => {
@@ -92,7 +94,7 @@ const ProductInfor: React.FC<Props> = ({ data }) => {
           }}
           numberOfLines={1}
         >
-          View Certificate
+          View Certification
         </Text>
       </TouchableOpacity>
       <Modal visible={isImageViewVisible}>

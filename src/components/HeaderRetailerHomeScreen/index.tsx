@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: windowHeight * 0.013,
+    marginVertical: windowHeight * 0.012,
+    // height: 100,
   },
   text: {
     fontSize: 18,

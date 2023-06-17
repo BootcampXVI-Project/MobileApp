@@ -141,15 +141,14 @@ const DetailProductScreen = () => {
 
       <Text
         style={{
-          color: color.Primary,
-          // fontWeight: "bold",
-          fontFamily: "RobotoSlab-Bold",
+          // color: color.Primary,
+          fontFamily: "RobotoSlab-Medium",
           fontSize: 16,
           marginVertical: 6,
           marginLeft: 4,
         }}
       >
-        List item in this order
+        {order?.productItemList?.length == 1 ? "Item" : "Items"}
       </Text>
       <CustomCollapsible productItemList={order?.productItemList || []} />
       <MapComponent

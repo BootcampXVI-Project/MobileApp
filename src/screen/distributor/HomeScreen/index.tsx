@@ -32,13 +32,13 @@ const DATA: any[] = [
   },
 ];
 const HomeScreen = (props: Props) => {
-  const user = useSelector((state: any) => state?.auth?.user.user);
+  const user = useSelector((state: any) => state?.auth?.user?.user);
   // console.log("HOme", user);
   const [selectList, setSelectList] = useState<number>(1);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <DynamicHeader username={user?.userName} selectList={selectList}>
+      <DynamicHeader username={user?.fullName} selectList={selectList}>
         <View style={{}} />
       </DynamicHeader>
 
@@ -51,7 +51,7 @@ const HomeScreen = (props: Props) => {
           width: 200,
           transform: [{ rotate: "-90deg" }],
           position: "absolute",
-          top: 320,
+          top: Platform.OS === "ios" ? 360 : 320,
           left: -94,
         }}
       >

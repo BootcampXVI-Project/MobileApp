@@ -38,6 +38,7 @@ const HomeScreen = (props: Props) => {
     navigation.setOptions({
       headerStyle: {
         backgroundColor: color.Primary,
+        height: Platform.OS === "ios" ? 100 : undefined,
       },
       headerTitle: (props: any) => (
         <HeaderRetailerHomeScreen {...props} user={user.user} />
@@ -143,7 +144,7 @@ const HomeScreen = (props: Props) => {
         ListHeaderComponent={() => (
           <>
             <Text style={[styles.title, { marginHorizontal: 16 }]}>
-              Product for you
+              Your products
             </Text>
             <FlatList
               horizontal
@@ -168,7 +169,7 @@ const HomeScreen = (props: Props) => {
               }}
             />
             <Text style={[styles.title, { marginHorizontal: 16 }]}>
-              New Product
+              New Products
             </Text>
             {newProducts ? (
               <FlatList

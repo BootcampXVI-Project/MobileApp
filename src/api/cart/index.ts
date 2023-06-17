@@ -1,8 +1,9 @@
 import { createAPI } from "../axiosConfig";
 import { loadDone, loadStart } from "../../redux/features/load";
 import { ProductIdItem } from "../../types/models";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
-export const getCart = async (token: string, dispatch: any) => {
+export const getCart = async (token: string, dispatch: Dispatch<AnyAction>) => {
   try {
     const api = createAPI(token);
     const res = await api.get(`/retailer/cart/view`);
@@ -26,7 +27,7 @@ export const getCart = async (token: string, dispatch: any) => {
 export const getLenghtCart = async (
   setLenghtCart: any,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     const api = createAPI(token);
@@ -51,7 +52,7 @@ export const getLenghtCart = async (
 
 export const deleteProductInCart = async (
   token: string,
-  dispatch: any,
+  dispatch: Dispatch<AnyAction>,
   product: ProductIdItem
 ) => {
   try {
@@ -76,7 +77,7 @@ export const deleteProductInCart = async (
 
 export const addProductToCart = async (
   token: string,
-  dispatch: any,
+  dispatch: Dispatch<AnyAction>,
   product: ProductIdItem
 ) => {
   try {
@@ -99,7 +100,10 @@ export const addProductToCart = async (
   }
 };
 
-export const deleteCart = async (token: string, dispatch: any) => {
+export const deleteCart = async (
+  token: string,
+  dispatch: Dispatch<AnyAction>
+) => {
   try {
     const api = createAPI(token);
     const res = await api.patch(`/retailer/cart/delete`);

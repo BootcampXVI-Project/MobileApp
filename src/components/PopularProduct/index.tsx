@@ -80,7 +80,7 @@ const PopularProduct: React.FC<Props> = ({ product, index }) => {
             }}
             numberOfLines={1}
           >
-            {formatNumberWithCommas(product?.price)} VND
+            VND {formatNumberWithCommas(product?.price)}
           </Text>
         </View>
       </View>

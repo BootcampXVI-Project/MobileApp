@@ -14,17 +14,18 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { color } from "../../utils";
-import { useDispatch, useSelector } from "react-redux";
+import SearchBar from "../SearchBar";
+import { Order } from "../../types/models";
 import { Avatar } from "react-native-paper";
 import ItemOrderView from "../ItemOrderView";
 import { Feather } from "@expo/vector-icons";
-import React, { useEffect, useRef, useState } from "react";
 import { titleCase } from "../../helper/titleCase";
+import AnimatedLottieView from "lottie-react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { BlurView } from "@react-native-community/blur";
-import { Order } from "../../types/models";
-import { getOrdersOfDistributorByStatus } from "../../api/order";
 import { useFocusEffect } from "@react-navigation/native";
-import SearchBar from "../SearchBar";
+import React, { useEffect, useRef, useState } from "react";
+import { getOrdersOfDistributorByStatus } from "../../api/order";
 
 const wait = (timeout: any) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -125,8 +126,10 @@ function App({
       return () => {};
     }, [selectList])
   );
+
   const [searchPhrase, setSearchPhrase] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
+
   return (
     <View style={styles.container}>
       <Animated.View
@@ -154,7 +157,6 @@ function App({
       >
         <Feather name="arrow-down" color="white" size={25} />
       </Animated.View>
-
       <AnimatedImageBackground
         style={{
           backgroundColor: color.Primary,
@@ -214,6 +216,34 @@ function App({
         clicked={clicked}
         setClicked={setClicked}
       />
+      {(ordersShipping?.length === 0 && selectList == 1) ||
+      (ordersShipped?.length === 0 && selectList == 0) ||
+      (ordersApproved?.length === 0 && selectList == 2) ? (
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            top: 60,
+            flex: 1,
+          }}
+        >
+          <AnimatedLottieView
+            source={require("../../../assets/question/empty-box1.json")}
+            autoPlay
+            style={{ width: "100%" }}
+          />
+          <Text
+            style={{
+              top: 0,
+              fontFamily: "RobotoSlab-Bold",
+              fontSize: 16,
+              color: "black",
+            }}
+          >
+            No Orders Yet
+          </Text>
+        </View>
+      ) : null}
       <Animated.FlatList
         data={
           selectList == 1
@@ -226,19 +256,6 @@ function App({
           zIndex: 2,
           paddingHorizontal: 16,
         }}
-        // onScroll={Animated.event(
-        //   [
-        //     {
-        //       nativeEvent: {
-        //         contentOffset: { y: scrollY },
-        //       },
-        //     },
-        //   ],
-        //   { useNativeDriver: true }
-        // )}
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
         renderItem={({ item }) => (
           <ItemOrderView
             isShowStatus={true}

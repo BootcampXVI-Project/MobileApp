@@ -39,7 +39,7 @@ const TimeLineProduct = React.memo(function TimeLineProduct({ data }: Props) {
           return (
             <View style={{ flex: 1, top: -10 }}>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
-                Responsible:{" "}
+                Responsibility:{" "}
                 <Text style={{ fontFamily: "RobotoSlab-Medium" }}>
                   {rowData?.actor?.fullName}
                 </Text>

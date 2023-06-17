@@ -1,11 +1,12 @@
 import { createAPI } from "../axiosConfig";
 import { loadDone, loadStart } from "../../redux/features/load";
 import { ProductCommercial } from "../../types/models";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 export const getProductById = async (
   id: string,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     const api = createAPI(token);
@@ -14,6 +15,8 @@ export const getProductById = async (
     const res = await api.get(`/product/${id}/`);
 
     if (res.status === 200) {
+      // console.log(res?.data);
+
       return res?.data?.data;
     }
   } catch (error: any) {
@@ -32,11 +35,10 @@ export const getProductById = async (
 export const getProductCommercialById = async (
   id: string,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     const api = createAPI(token);
-    // console.log(id);
 
     const res = await api.get(`/product-commercial/${id}/`);
 
@@ -49,6 +51,7 @@ export const getProductCommercialById = async (
         ...productCommercial,
         amount: res_product.data.data.amount,
       };
+
       return response;
     }
   } catch (error: any) {
@@ -64,7 +67,10 @@ export const getProductCommercialById = async (
   }
 };
 
-export const getAllProducts = async (token: any, dispatch: any) => {
+export const getAllProducts = async (
+  token: string,
+  dispatch: Dispatch<AnyAction>
+) => {
   // dispatch(loadStart());
   try {
     const api = createAPI(token);
@@ -87,7 +93,10 @@ export const getAllProducts = async (token: any, dispatch: any) => {
   }
 };
 
-export const getProductsPopular = async (token: any, dispatch: any) => {
+export const getProductsPopular = async (
+  token: string,
+  dispatch: Dispatch<AnyAction>
+) => {
   // dispatch(loadStart());
   try {
     const api = createAPI(token);
@@ -95,6 +104,10 @@ export const getProductsPopular = async (token: any, dispatch: any) => {
 
     if (res.status === 200) {
       // dispatch(loadDone());
+      if (res.data.data.length < 3) {
+        const res_product = await api.get("/retailer/product/manufactured");
+        return res_product.data.data;
+      }
       return res.data.data;
     }
   } catch (error: any) {
@@ -110,7 +123,10 @@ export const getProductsPopular = async (token: any, dispatch: any) => {
   }
 };
 
-export const getProductsManufactured = async (token: any, dispatch: any) => {
+export const getProductsManufactured = async (
+  token: string,
+  dispatch: Dispatch<AnyAction>
+) => {
   // dispatch(loadStart());
   try {
     const api = createAPI(token);

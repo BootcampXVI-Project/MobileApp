@@ -3,7 +3,7 @@ export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;
 
 export const GOOGLE_MAPS_APIKEY = "AIzaSyCncu1y32EgJiv1FIuP85z0QwM-K00ecgQ";
-export const API_URL = "https://bf65e7c30fcf.ngrok.app";
+export const API_URL = "https://5f49bd469af0.ngrok.app/";
 export const shadow = {
   shadowColor: "#000",
   shadowOffset: {
@@ -20,7 +20,7 @@ export const getDelta = (
 ) => {
   const latitudes = coordinates.map((coord) => coord.latitude);
   const longitudes = coordinates.map((coord) => coord.longitude);
-  //
+
   const maxLatitude = Math.max(...latitudes);
   const minLatitude = Math.min(...latitudes);
   const maxLongitude = Math.max(...longitudes);
@@ -41,3 +41,5 @@ export const color = {
   Pending: "#e69b07",
   Shipping: "#294268",
 };
+
+// làm chat giữa các role, hoặc thông báo.

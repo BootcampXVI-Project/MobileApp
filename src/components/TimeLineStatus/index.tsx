@@ -35,7 +35,7 @@ const TimeLineStatus: React.FC<Props> = ({ data, setIsImageViewVisible }) => {
           return (
             <View style={{ flex: 1, top: -10 }}>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
-                Responsible:{" "}
+                Responsibility:{" "}
                 <Text style={{ fontFamily: "RobotoSlab-Medium" }}>Parker</Text>
               </Text>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>

@@ -18,17 +18,20 @@ import { Image, ScrollView, Text, View } from "react-native";
 import AwesomeButton from "react-native-really-awesome-button";
 import { color, windowHeight, windowWidth } from "../../utils";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { resetMessage } from "../../redux/features/auth";
 
 type Props = {};
 type FormValues = {
-  username: string;
+  phoneNumber: string;
   password: string;
 };
 const PHONE_REGEX = /^(\+?\d{0,9}[-.\s]?)?\d{9,}$/;
 
 const Login = (props: Props) => {
   const user = useSelector((state: any) => state?.auth?.user?.user);
-  // console.log(user);
+  const message = useSelector((state: any) => state?.auth?.message);
+
+  // console.log(message);
   const scrollViewRef = useRef<ScrollView>(null);
   const headerMotion = useRef(new Animated.Value(0)).current;
   const animatedKeyBoard = (motion: any, value: any, duration: any) => {
@@ -56,6 +59,8 @@ const Login = (props: Props) => {
     };
   }, []);
   useEffect(() => {
+    dispatch(resetMessage());
+
     dispatch(loadDone());
     if (user) {
       user?.role === "distributor"
@@ -129,6 +134,15 @@ const Login = (props: Props) => {
               },
             }}
           />
+          <Text
+            style={{
+              fontFamily: "RobotoSlab-VariableFont_wght",
+              marginVertical: 2,
+              color: "red",
+            }}
+          >
+            {message}
+          </Text>
         </View>
         <View style={styles.boxForgotPassword}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>

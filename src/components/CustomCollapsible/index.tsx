@@ -29,6 +29,7 @@ const CustomCollapsible: React.FC<Props> = ({ productItemList }) => {
         }}
         styleTitle={{ color: "#fff" }}
         title={section.product.productName}
+        quantity={section.quantity}
       />
     );
   };

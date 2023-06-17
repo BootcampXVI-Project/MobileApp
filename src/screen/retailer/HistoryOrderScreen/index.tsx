@@ -123,16 +123,6 @@ const HistoryOrderScreen = (props: Props) => {
             flex: 1,
           }}
         >
-          <Text
-            style={{
-              top: 100,
-              fontFamily: "RobotoSlab-Bold",
-              fontSize: 32,
-              color: color.Primary,
-            }}
-          >
-            Let's create your order
-          </Text>
           <AnimatedLottieView
             source={require("../../../../assets/question/empty-box.json")}
             autoPlay
@@ -140,6 +130,16 @@ const HistoryOrderScreen = (props: Props) => {
             // style={styles.load}
             style={{ width: "100%" }}
           />
+          <Text
+            style={{
+              top: 0,
+              fontFamily: "RobotoSlab-Bold",
+              fontSize: 16,
+              color: "black",
+            }}
+          >
+            No Orders Yet
+          </Text>
         </View>
       )}
     </View>

@@ -1,9 +1,21 @@
 import { instance as api } from "../axiosConfig";
 import { loadDone, loadStart } from "../../redux/features/load";
-import { logoutSuccess, setUser } from "../../redux/features/auth";
+import { loginFailed, logoutSuccess, setUser } from "../../redux/features/auth";
 import { convertPhoneNumberTo84 } from "../../helper/convertPhonenumber";
+import { Dispatch } from "react";
+import { AnyAction } from "@reduxjs/toolkit";
+import { NavigationProp } from "@react-navigation/native";
 
-export const loginUser = async (user: any, dispatch: any, navigation: any) => {
+type FormValues = {
+  phoneNumber: string;
+  password: string;
+};
+
+export const loginUser = async (
+  user: FormValues,
+  dispatch: Dispatch<AnyAction>,
+  navigation: NavigationProp<ReactNavigation.RootParamList>
+) => {
   dispatch(loadStart());
   try {
     let { phoneNumber, password } = user;
@@ -11,21 +23,24 @@ export const loginUser = async (user: any, dispatch: any, navigation: any) => {
 
     const res = await api.post("/auth/login", { phoneNumber, password });
 
-    if (res.status === 200) {
-      dispatch(setUser(res.data.data));
-
-      res.data?.data?.user?.role === "distributor"
-        ? navigation.navigate("MainDistributor", {
-            screen: "Home",
-            initial: false,
-          })
-        : navigation.navigate("MainRetailer", {
-            screen: "Home",
-            initial: false,
-          });
-
-      dispatch(loadDone());
+    if (res?.status === 200) {
+      // console.log(res);
+      if (!res?.data?.data) {
+        dispatch(loginFailed(res.data.message));
+      } else {
+        dispatch(setUser(res.data.data));
+        res.data?.data?.user?.role === "distributor"
+          ? navigation.navigate("MainDistributor", {
+              screen: "Home",
+              initial: false,
+            })
+          : navigation.navigate("MainRetailer", {
+              screen: "Home",
+              initial: false,
+            });
+      }
     }
+    dispatch(loadDone());
   } catch (error: any) {
     if (error.response) {
       console.log("Server response error:", error.response.data);
@@ -38,7 +53,11 @@ export const loginUser = async (user: any, dispatch: any, navigation: any) => {
     dispatch(loadDone());
   }
 };
-export const logoutUser = async (dispatch: any, navigation: any) => {
+
+export const logoutUser = async (
+  dispatch: Dispatch<AnyAction>,
+  navigation: NavigationProp<ReactNavigation.RootParamList>
+) => {
   dispatch(loadStart());
   try {
     dispatch(logoutSuccess());

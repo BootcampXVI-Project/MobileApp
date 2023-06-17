@@ -5,10 +5,11 @@ import {
   OrderForUpdateFinish,
   OrderPayloadForCreate,
 } from "../../types/models";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 
 export const getAllOrders = async (
-  token: any,
-  dispatch: any,
+  token: string,
+  dispatch: Dispatch<AnyAction>,
   status: string
 ) => {
   dispatch(loadStart());
@@ -40,7 +41,7 @@ export const getAllOrders = async (
 export const getOrderById = async (
   id: string,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     const api = createAPI(token);
@@ -66,7 +67,7 @@ export const getOrderById = async (
 export const getOrdersOfRetailerByStatus = async (
   status: string,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     const api = createAPI(token);
@@ -92,7 +93,7 @@ export const getOrdersOfRetailerByStatus = async (
 export const getOrdersOfDistributorByStatus = async (
   status: string,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     const api = createAPI(token);
@@ -119,7 +120,7 @@ export const getOrdersOfDistributorByStatus = async (
 export const createOrder = async (
   order: OrderPayloadForCreate,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     // dispatch(loadStart());
@@ -147,7 +148,7 @@ export const createOrder = async (
 export const updateOrder = async (
   order: OrderForUpdateFinish,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     // dispatch(loadStart());
@@ -176,13 +177,13 @@ export const updateOrder = async (
 export const finishOrder = async (
   order: OrderForUpdateFinish,
   token: string,
-  dispatch: any
+  dispatch: Dispatch<AnyAction>
 ) => {
   try {
     // dispatch(loadStart());
 
     const api = createAPI(token);
-    const res = await api.post(`/order/finish`, { orderObj: order });
+    const res = await api.patch(`/order/finish`, { orderObj: order });
 
     if (res.status === 200) {
       console.log("ORDER FINISH", res?.data);

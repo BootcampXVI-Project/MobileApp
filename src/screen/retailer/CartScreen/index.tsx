@@ -37,7 +37,7 @@ const CartScreen = (props: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "My cart",
+      title: "Shopping Cart",
       headerTitleAlign: "center",
       headerTitleStyle: {
         color: "#fff",
@@ -128,7 +128,7 @@ const CartScreen = (props: Props) => {
         }}
         style={{ marginTop: 12 }}
       />
-      {cart.length == 0 ? (
+      {cart?.length == 0 ? (
         <View
           style={{
             alignItems: "center",
@@ -141,11 +141,11 @@ const CartScreen = (props: Props) => {
             style={{
               top: 100,
               fontFamily: "RobotoSlab-Bold",
-              fontSize: 32,
-              color: color.Primary,
+              fontSize: 16,
+              color: "black",
             }}
           >
-            Your cart is empty
+            Your shopping cart is empty, find your product!
           </Text>
           <AnimatedLottieView
             source={require("../../../../assets/question/empty-cart.json")}

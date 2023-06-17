@@ -3,9 +3,11 @@ import { parseUrl } from "../../../helper/parseUrl";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import { Svg, Defs, Rect, Mask, Path } from "react-native-svg";
-import { color, windowHeight, windowWidth } from "../../../utils";
+import { API_URL, color, windowHeight, windowWidth } from "../../../utils";
 import { Button, Image, Platform, StyleSheet, Text, View } from "react-native";
 import AnimatedLottieView from "lottie-react-native";
+import ReactNativeModal from "react-native-modal";
+import ModalNullData from "../../../components/ModalNullData";
 
 const ScanScreen = () => {
   const navigation = useNavigation();
@@ -17,6 +19,7 @@ const ScanScreen = () => {
 
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
+  const [viewDataNotFound, setViewDataNotFound] = useState(false);
 
   const askForCameraPermission = () => {
     (async () => {
@@ -32,12 +35,12 @@ const ScanScreen = () => {
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
-    // setScanned(true);
     if (data !== text) {
       setText(data);
-      //parseUrl(data)
-      // console.log(parseUrl(data));
-
+      if (parseUrl(data)?.domain !== API_URL) {
+        setViewDataNotFound(true);
+        return null;
+      }
       if (parseUrl(data)?.path === "order") {
         navigation.navigate("OrderDetailScreen", parseUrl(data)?.id);
       } else if (parseUrl(data)?.path === "product") {
@@ -133,8 +136,7 @@ const ScanScreen = () => {
                       textAlign: "center",
                     }}
                   >
-                    To scan a QR code, make sure that the QR code is within the
-                    scanning frame on the screen.
+                    Scan QR code
                   </Text>
                 </View>
               </Mask>
@@ -157,6 +159,16 @@ const ScanScreen = () => {
           </Svg>
         </BarCodeScanner>
       </View>
+      <ReactNativeModal
+        isVisible={viewDataNotFound}
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <ModalNullData
+          funCancel={() => {
+            setViewDataNotFound(false);
+          }}
+        />
+      </ReactNativeModal>
     </View>
   );
 };

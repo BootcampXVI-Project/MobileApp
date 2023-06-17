@@ -78,7 +78,7 @@ const NewProduct: React.FC<Props> = ({ product }) => {
           fontSize: 16,
         }}
       >
-        {formatNumberWithCommas(product?.product?.price)} VND
+        VND {formatNumberWithCommas(product?.product?.price)}
       </Text>
     </TouchableOpacity>
   );

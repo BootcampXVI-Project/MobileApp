@@ -4,6 +4,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type Props = {
   title: string;
+  quantity: string;
   styleTitle: any;
   styleIcon: any;
   styleContainer: any;
@@ -12,6 +13,7 @@ type Props = {
 
 const CardProduct: React.FC<Props> = ({
   title,
+  quantity,
   styleTitle,
   styleIcon,
   styleContainer,
@@ -19,12 +21,26 @@ const CardProduct: React.FC<Props> = ({
 }) => {
   return (
     <View style={[styles.container, styleContainer]}>
-      <Text style={[styles.title, styleTitle]}>{title}</Text>
-      <Ionicons
-        name={onActive ? "ios-caret-up" : "ios-caret-down"}
-        size={30}
-        style={[styles.icon, styleIcon]}
-      />
+      <Text style={[styles.title, styleTitle]} numberOfLines={1}>
+        {title}
+      </Text>
+      <View style={[styles.iconAndQuantity]}>
+        <Text
+          style={{
+            fontSize: 20,
+            fontFamily: "RobotoSlab-SemiBold",
+            color: "#fff",
+            marginRight: 6,
+          }}
+        >
+          x{quantity}
+        </Text>
+        <Ionicons
+          name={onActive ? "ios-caret-up" : "ios-caret-down"}
+          size={30}
+          style={[styles.icon, styleIcon]}
+        />
+      </View>
     </View>
   );
 };
@@ -49,8 +65,11 @@ const styles = StyleSheet.create({
     fontFamily: "RobotoSlab-SemiBold",
     marginLeft: windowHeight * 0.02,
     marginTop: windowHeight * 0.015,
+    maxWidth: 260,
   },
-  icon: {
-    marginTop: windowHeight * 0.01,
+  icon: {},
+  iconAndQuantity: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
