@@ -5,18 +5,35 @@ import { convertTimeString, convertToUTC } from "../../helper/formatDate";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 type Props = {
-  data: any;
+  data?: any;
   setIsImageViewVisible: any;
 };
 
 const TimeLineStatus: React.FC<Props> = ({ data, setIsImageViewVisible }) => {
-  // console.log(data);
+  if (data) {
+    for (const item of data) {
+      const status = item?.status;
+      if (status === "PENDING") {
+        item.icon = require("../../../assets/icon/manufacturer.png");
+      } else if (status === "APPROVED") {
+        item.icon = require("../../../assets/icon/manufacturer.png");
+      } else if (status === "SHIPPING") {
+        item.icon = require("../../../assets/icon/distributor.png");
+      } else if (status === "SHIPPED") {
+        item.icon = require("../../../assets/icon/distributor.png");
+      }
+    }
+  }
   return (
     <View style={[styles.container, styles.shadow]}>
       <Timeline
         data={data}
         circleSize={24}
-        circleColor={color.Primary}
+        circleColor={"rgba(55, 150, 52,0.6)"}
+        iconStyle={{
+          width: 30,
+          height: 30,
+        }}
         lineColor={color.Primary}
         timeContainerStyle={{ marginTop: 0 }}
         timeStyle={{
@@ -30,17 +47,21 @@ const TimeLineStatus: React.FC<Props> = ({ data, setIsImageViewVisible }) => {
         descriptionStyle={{ color: "gray" }}
         style={{ paddingTop: 5 }}
         isUsingFlatlist={true}
-        innerCircle={"dot"}
+        innerCircle={"icon"}
         renderDetail={(rowData) => {
           return (
             <View style={{ flex: 1, top: -10 }}>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
                 Responsibility:{" "}
-                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>Parker</Text>
+                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>
+                  {rowData?.actor?.fullName}
+                </Text>
               </Text>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
                 Address:{" "}
-                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>Da Nang</Text>
+                <Text style={{ fontFamily: "RobotoSlab-Medium" }}>
+                  {rowData?.address}
+                </Text>
               </Text>
               <Text style={{ fontFamily: "RobotoSlab-VariableFont_wght" }}>
                 Status:{" "}
@@ -50,7 +71,7 @@ const TimeLineStatus: React.FC<Props> = ({ data, setIsImageViewVisible }) => {
                     color: color.Primary,
                   }}
                 >
-                  {rowData.status}
+                  {rowData?.status}
                 </Text>
               </Text>
               {rowData.status === "SHIPPED" ? (

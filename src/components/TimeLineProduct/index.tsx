@@ -12,15 +12,38 @@ const TimeLineProduct = React.memo(function TimeLineProduct({ data }: Props) {
   const filteredDates = data?.filter(
     (date: any) => date?.status !== "sold" && date?.status !== "selling"
   );
-  // console.log("1");
 
-  // console.log(data);
+  if (data) {
+    for (const item of data as any) {
+      const status = item?.status;
+      if (status === "CULTIVATED") {
+        item.icon = require("../../../assets/icon/cultivated.png");
+      } else if (status === "HARVESTED") {
+        item.icon = require("../../../assets/icon/harvested.png");
+      } else if (status === "IMPORTED") {
+        item.icon = require("../../../assets/icon/imported.png");
+      } else if (status === "MANUFACTURED") {
+        item.icon = require("../../../assets/icon/manufacturer.png");
+      } else if (status === "EXPORTED") {
+        item.icon = require("../../../assets/icon/exported.png");
+      } else if (status === "DISTRIBUTING") {
+        item.icon = require("../../../assets/icon/distributor.png");
+      } else if (status === "RETAILING") {
+        item.icon = require("../../../assets/icon/retailer.png");
+      }
+    }
+  }
   return (
     <View style={[styles.container, styles.shadow]}>
       <Timeline
         data={filteredDates}
         circleSize={24}
-        circleColor={color.Primary}
+        circleColor={"rgba(55, 150, 52,0.6)"}
+        iconStyle={{
+          width: 30,
+          height: 30,
+        }}
+        innerCircle={"icon"}
         lineColor={color.Primary}
         timeContainerStyle={{ marginTop: 0 }}
         timeStyle={{
@@ -34,7 +57,6 @@ const TimeLineProduct = React.memo(function TimeLineProduct({ data }: Props) {
         descriptionStyle={{ color: "gray" }}
         style={{ paddingTop: 5 }}
         isUsingFlatlist={true}
-        innerCircle={"dot"}
         renderDetail={(rowData: ProductDate) => {
           return (
             <View style={{ flex: 1, top: -10 }}>

@@ -13,13 +13,13 @@ export const UserRoleArray = [
 ];
 
 export type ProductStatus =
-  | "CULTIVATING"
+  | "CULTIVATED"
   | "HARVESTED"
   | "IMPORTED"
   | "MANUFACTURED"
   | "EXPORTED"
-  | "DISTRIBUTED"
-  | "SELLING"
+  | "DISTRIBUTING"
+  | "RETAILING"
   | "SOLD";
 export type ProductDateStatus =
   | "CULTIVATED"

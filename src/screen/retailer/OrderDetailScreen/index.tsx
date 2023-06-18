@@ -41,7 +41,7 @@ const OrderDetailScreen = (props: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Order",
+      title: "Your Order",
       headerTitleAlign: "center",
       headerTitleStyle: {
         color: "#fff",
@@ -115,24 +115,7 @@ const OrderDetailScreen = (props: Props) => {
               backgroundColor: "#fff",
             }}
           >
-            <Text
-              style={{
-                marginTop: 12,
-                fontFamily: "RobotoSlab-VariableFont_wght",
-                fontSize: 16,
-                marginVertical: 8,
-              }}
-            >
-              Your Order:{" "}
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: "RobotoSlab-Medium",
-                }}
-              >
-                {order?.orderId}
-              </Text>
-            </Text>
+            <View style={{ marginTop: 12 }} />
             <StautsOrderComponent status={order?.status} />
             <Text
               style={{

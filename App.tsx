@@ -22,11 +22,13 @@ LogBox.ignoreLogs([
 LogBox.ignoreLogs([
   'Key "cancelled" in the image picker result is deprecated and will be removed in SDK 48',
 ]);
+LogBox.ignoreLogs([
+  "Failed prop type: Invalid prop `defaultSource` supplied to `Image`, expected one of type [number]",
+]);
+
 export default function App() {
-  // console.log(firebaseConfig);
   const [IsReady, SetIsReady] = useState(false);
 
-  // Return the View
   useEffect(() => {
     async function prepare() {
       try {
@@ -51,8 +53,6 @@ export default function App() {
   if (!IsReady) {
     return null;
   }
-  // const load = useSelector((state: any) => state.load.loading);
-  // console.log(load);
 
   return (
     <Provider store={store}>
@@ -77,10 +77,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
-// retailer;
-// 0886755770;
-// pass: retailer;
-
-// distributor;
-// 0886755771;
-// pass: distributor;

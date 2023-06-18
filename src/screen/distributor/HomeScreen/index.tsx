@@ -1,6 +1,4 @@
 import {
-  FlatList,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,29 +9,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { color, windowHeight } from "../../../utils";
 import DynamicHeader from "../../../components/DynamicHeader";
-import ItemOrderView from "../../../components/ItemOrderView";
 
 type Props = {};
-const renderItem = ({ item }: { item: any }) => {
-  return <ItemOrderView />;
-};
-const DATA: any[] = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-];
 const HomeScreen = (props: Props) => {
   const user = useSelector((state: any) => state?.auth?.user?.user);
-  // console.log("HOme", user);
   const [selectList, setSelectList] = useState<number>(1);
 
   return (

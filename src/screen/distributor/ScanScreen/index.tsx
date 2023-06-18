@@ -4,7 +4,13 @@ import AnimatedLottieView from "lottie-react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import { Svg, Defs, Rect, Mask } from "react-native-svg";
-import { API_URL, color, windowHeight, windowWidth } from "../../../utils";
+import {
+  API_URL,
+  FE_URL,
+  color,
+  windowHeight,
+  windowWidth,
+} from "../../../utils";
 import { Button, Image, Platform, StyleSheet, Text, View } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import ModalNullData from "../../../components/ModalNullData";
@@ -37,12 +43,18 @@ const ScanScreen = () => {
   const handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
     if (data !== text) {
       setText(data);
-      if (parseUrl(data)?.domain !== API_URL) {
-        setViewDataNotFound(true);
-        return null;
-      }
-      if (parseUrl(data)?.path === "order") {
-        navigation.navigate("OrderDetailScreen", parseUrl(data)?.id);
+      console.log(parseUrl(data)?.domain);
+
+      if (
+        parseUrl(data)?.domain == API_URL ||
+        parseUrl(data)?.domain == FE_URL
+      ) {
+        if (parseUrl(data)?.path === "order") {
+          navigation.navigate("DetailProductScreen", parseUrl(data)?.id);
+        } else {
+          setViewDataNotFound(true);
+          return null;
+        }
       } else {
         setViewDataNotFound(true);
         return null;

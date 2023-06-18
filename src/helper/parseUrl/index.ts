@@ -8,7 +8,7 @@ export function parseUrl(
     return null;
   }
 
-  const domain = url.split("/").slice(0, 3).join("/");
+  const domain = url.split("/").slice(0, 3).join("/") + "/";
   const path = url.split("/").slice(-2)[0];
   const id = url.split("/").slice(-1)[0];
 
